@@ -1,153 +1,184 @@
 <template>
+    <div class="flex justify-center mt-5">
+      <form class="w-auto max-w-4xl p-8 bg-white border-4 border-[#3E4095] rounded-md shadow-md"
+        @submit="sub($event)"
+      >
+        <h2 class="mb-5 text-4xl font-bold text-center text-[#3E4095]">Registrar Usuario</h2>
+        <div class="grid grid-cols-2 gap-10 mt-5">
+            <Input 
+                label="Nombre"
+                placeholder="Nombre"
+                type="text"
+                name="nombre"
+                v-model="form.nombre.value"
+                :validation-status="form.nombre.error.status"
+                :validation-message="form.nombre.error.message"
+            />
+            <Input 
+                label="Correo"
+                placeholder="Correo"
+                type="email"
+                name="email"
+                v-model="form.email.value"
+                :validation-status="form.email.error.status"
+                :validation-message="form.email.error.message"
+            />
+            <Input 
+                label="Teléfono"
+                placeholder="Teléfono"
+                type="text"
+                name="phone"
+                v-model="form.phone.value"
+                :validation-status="form.phone.error.status"
+                :validation-message="form.phone.error.message"
+            />
+            <Input 
+                label="Contraseña"
+                placeholder="Contraseña"
+                type="password"
+                name="password"
+                v-model="form.password.value"
+                :validation-status="form.password.error.status"
+                :validation-message="form.password.error.message"
+            />
+            <div class="col-span-2">
+                <label for="countries" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Select an option</label>
+                <select v-model="form.rol.value"
+                id="countries" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                    <option selected>Elija una opción</option>
+                    <option v-for="rol in roles" :value="rol.id">{{ rol.nombre }}</option>
+                </select>
 
-<div class="flex justify-center items-center">
-    <div class="mt-20 bg-blue-100 p-5 space-y-10 rounded-lg shadow-md w-3/6">
-        <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white text-center">
-            Crear Usuario
-        </h5>
-        <fwb-input
-        v-model="form.nombre.value"
-        label="Nombre"
-        placeholder="Nombre"
-        required
-        />
-        <!-- <div class="grid grid-cols-2 gap-10">
-            <fwb-input
-            v-model="form.apellido_paterno.value"
-            label="Apellido Paterno"
-            placeholder="Apellido Paterno"
-            required
-            />
-            <fwb-input
-            v-model="form.apellido_materno.value"
-            label="Apellido Materno"
-            placeholder="Apellido Materno"
-            required
-            />
-        </div> -->
-        <div class="grid grid-cols-2 gap-10">
-            <fwb-input
-            v-model="form.correo.value"
-            label="Correo"
-            placeholder="example@example.com"
-            required
-            />
-            <fwb-input
-            v-model="form.telefono.value"
-            label="Teléfono"
-            placeholder="871-000-0000"
-            required
-            />
+            </div>
         </div>
-        <fwb-input
-            v-model="form.password.value"
-            label="Contraseña"
-            placeholder="Contraseña"
-            type="password"
-            required
-            />
-        <fwb-select
-            v-model="form.rol_id.value"
-            :options="roles"
-            label="Rol"
-        />
-        <p v-if="succ" class="text-emerald-500">  Usuario Registrado </p>
-        <div class="space-x-5 flex justify-end">
-            <fwb-button gradient="red">Cancelar</fwb-button>
-            <fwb-button gradient="blue" @click="submit">Aceptar</fwb-button>
+        <div class="flex justify-end mt-16 space-x-8">
+            <button @click="back"
+            class="border border-[#FF0000] rounded-2xl py-1 px-6 bg-white hover:bg-[#FF0000] hover:text-white">
+                Cancelar
+            </button>
+            <button @click="submit"
+            class="border border-[#3E4095] rounded-2xl py-1 px-8 bg-white hover:bg-[#3E4095] hover:text-white">
+                Crear
+            </button>
         </div>
+      </form>
     </div>
-</div>
-</template>
+  </template>
   
 <script setup>
-    import { ref, onMounted } from 'vue'
-    import axios from 'axios'
-    import { FwbInput, FwbSelect, FwbButton } from 'flowbite-vue'
-    // Obtener la url de la api del .env
-    const URL_API = import.meta.env.VITE_API_URL
-    const succ = ref(false)
-    const roles = ref([])
-    const form = ref({
-        nombre: {
-            value: '',
-            error: '',
+import {ref, onMounted} from 'vue'
+import { crearUsuario } from '../../services/usuarios.js'
+import {roles as GetRoles} from '../../services/roles.js'
+import Input from '../../components/Forms/Input.vue'
+
+const form = ref({
+    nombre: {
+        value: '',
+        error: {
+            status: '',
             message: ''
-        },
-        apellido_paterno: {
-            value: '',
-            error: '',
+        }
+    },
+    email: {
+        value: '',
+        error: {
+            status: '',
             message: ''
-        },
-        apellido_materno: {
-            value: '',
-            error: '',
+        }
+    },
+    phone: {
+        value: '',
+        error: {
+            status: '',
             message: ''
-        },
-        correo: {
-            value: '',
-            error: '',
+        }
+    
+    },
+    password: {
+        value: '',
+        error: {
+            status: '',
             message: ''
-        },
-        telefono: {
-            value: '',
-            error: '',
+        }
+    },
+    rol: {
+        value: '',
+        error: {
+            status: '',
             message: ''
-        },
-        password: {
-            value: '',
-            error: '',
-            message: ''
-        },
-        rol_id: {
-            value: '',
-            error: '',
-            message: ''
-        },
-    })
-    const getRoles = async () => {
-        try {
-            const res = await axios.get(`${URL_API}/roles`)
-            if(res.status == 200) {
-                roles.value = res.data.roles.map((role) => {
-                    return {
-                        value: role.id,
-                        name: role.nombre
-                    }
-                })
-            }else{
-                console.log(res)
-            }
-        } catch (error) {
-            console.log(error)        
         }
     }
-    const submit = async () => {
-        const data = {
-            nombre: form.value.nombre.value,
-            correo: form.value.correo.value,
-            telefono: form.value.telefono.value,
-            password: form.value.password.value,
-            rol_id: form.value.rol_id.value
-        }
-        try {
-            const res = await axios.post(`${URL_API}/registrar`,data, {
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': 'Bearer ' + localStorage.getItem('token')
-                },
-            })
-            if(res.status == 200) {
-                succ.value = true
-                setTimeout(()=>{
-                    window.location.href = '/'
-                }, 2000)
-            }
-        } catch (error) {
-            console.log(error)        
-        }
+})
+
+const back = () => {
+    location.href = '/usuarios';
+}
+
+const submit = async (e) => {
+    if(!validar()) return;
+    e.preventDefault();
+    const data = {
+        nombre: form.value.nombre.value,
+        correo: form.value.email.value,
+        telefono: form.value.phone.value,
+        password: form.value.password.value,
+        rol_id: form.value.rol.value,
     }
-    onMounted(() => {
-        getRoles()
-    })
+    try {
+        const res = await crearUsuario(data);
+        if(res.status < 300){
+            location.href = '/usuarios';
+        }
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+const validar = ()=>{
+    let valid = true;
+    if(form.value.nombre.value === ''){
+        form.value.nombre.error.status = 'error';
+        form.value.nombre.error.message = 'El nombre es requerido';
+        valid = false;
+    }
+    if(form.value.email.value === ''){
+        form.value.email.error.status = 'error';
+        form.value.email.error.message = 'El correo es requerido';
+        valid = false;
+    }
+    if(form.value.phone.value === ''){
+        form.value.phone.error.status = 'error';
+        form.value.phone.error.message = 'El teléfono es requerido';
+        valid = false;
+    }
+    if(form.value.password.value === ''){
+        form.value.password.error.status = 'error';
+        form.value.password.error.message = 'La contraseña es requerida';
+        valid = false;
+    }
+    if(form.value.rol.value === ''){
+        form.value.rol.error.status = 'error';
+        form.value.rol.error.message = 'El rol es requerido';
+        valid = false;
+    }
+    return valid;
+}
+
+const roles = ref([]);
+onMounted(async ()=>{
+    try {
+        const res = await GetRoles();
+        if(res.status < 300){
+            roles.value = res.data.roles;
+        }
+    } catch (error) {
+        console.log(error);
+    }
+})
+
+const sub = (e) => {e.preventDefault();}
 </script>
+
+<style scoped>
+</style>
+  

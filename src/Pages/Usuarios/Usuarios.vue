@@ -1,60 +1,64 @@
 <script setup>
-import { FwbButton } from 'flowbite-vue';
-import DataTable from '../../components/Tables/DataTable.vue';
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
+import { usuarios, deleteUsuario }  from '../../services/usuarios.js'
+import Table from '../../components/Tables/Table.vue'
 const router = useRouter();
-const data = ref([
-    {
-        persona: 'Juan Perez',
-        rfc: 'PEJU123456',
-        regimen: 'Persona Física',
-        emails: 'juan@example.com',
-        cp: '12345'
-    },
-    {
-        persona: 'Pedro Lopez',
-        rfc: 'LOPE123456',
-        regimen: 'Persona Moral',
-        emails: 'pedro@example.com',
-        cp: '54321'
-    },
-]);
+const headers = ['Nombre','Correo','Teléfono','Rol'];
+const columns = ['nombre','correo','telefono','rol_id'];
+const data = ref([])
 const edit = (id) => {
     console.log('Editando', id);
 }
-const deleted = (id) => {
-    console.log('Eliminando', id);
+const deleted = async (id) => {
+    try {
+        const res = await deleteUsuario(id);
+        if(res.status < 300){
+            console.log('Eliminado', id);
+            location.reload();
+        }
+    } catch (error) {
+        console.log(error);
+    }
 }
 const addUser = () => {
     router.push('/usuarios/crear');
 }
+
+onMounted(async () => {
+    try {
+        const res = await usuarios();
+        const  d = res.data.data;
+        data.value = d.map((item) => {
+            item['edit'] = edit
+            item['delete'] = deleted
+            return item;
+        });
+    } catch (error) {
+        console.log(error);
+    }
+});
+
 </script>
 
 <template>
-    <div class="space-y-5 mt-44">
+    <div class="space-y-5">
         <div class="flex justify-end mr-5">
-            <fwb-button gradient="blue" shadow="dark" 
+            <!-- <fwb-button gradient="blue" shadow="dark" 
             @click="addUser"
             >
                 Agregar Usuario
-            </fwb-button>
+            </fwb-button> -->
+        <button class="border border-[#3E4095] rounded-2xl py-1 px-5 bg-white hover:bg-[#3E4095] hover:text-white"
+            @click="addUser"
+        >
+            Nuevo Usuario
+        </button>
         </div>
-        <DataTable 
-        :data="data"
-        :header="['Persona', 'RFC', 'Regimen', 'Emails', 'Código Postal']"
-        :columns="['persona', 'rfc', 'regimen', 'emails', 'cp']"
-        :filterForColumn="true"
-        :acciones="[
-            {
-                action: edit,
-                icon: 'edit'
-            },
-            {
-                action: deleted,
-                icon: 'delete'
-            },
-        ]"
+        <Table 
+            :columns="columns"
+            :headers="headers"
+            :data="data"
         />
     </div>
 </template>
