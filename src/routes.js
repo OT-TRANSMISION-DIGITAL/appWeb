@@ -1,6 +1,6 @@
 // Configurar Router de Vue
 import { createWebHistory, createRouter, useRouter } from "vue-router";
-
+import { verifyToken } from "./guards/ValidateSession.js";
 
 const routes = [
     {
@@ -16,9 +16,18 @@ const routes = [
                 path: "/usuarios/crear",
                 name: "CrearUsuario",
                 component: () => import("./Pages/Usuarios/Crear.vue"),
+            },
+            {
+                path: "/clientes",
+                component: () => import("./Pages/Clientes/Clientes.vue"),
+            },
+            {
+                path: "/clientes/crear",
+                name: "CrearClientes",
+                component: () => import("./Pages/Clientes/Crear.vue"),
             }
-        ]
-        
+        ],
+        // beforeEnter: verifyToken,
     },
     {
         path: "/login",
