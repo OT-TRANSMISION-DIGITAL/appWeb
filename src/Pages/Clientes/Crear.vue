@@ -1,0 +1,133 @@
+<template>
+    <div class="flex justify-center mt-5">
+      <form class="w-auto max-w-4xl p-8 bg-white border-4 border-[#3E4095] rounded-md shadow-md"
+        @submit="sub($event)"
+      >
+        <h2 class="mb-5 text-4xl font-bold text-center text-[#3E4095]">Registrar Cliente</h2>
+        <div class="grid grid-cols-2 gap-10 mt-5">
+            <div class="col-span-2">
+                <Input 
+                    v-model="form.nombre.value"
+                    label="Nombre"
+                    placeholder="Nombre"
+                    type="text"
+                    name="nombre"
+                    :validation-status="form.nombre.error.status"
+                    :validation-message="form.nombre.error.message"
+                />
+            </div>
+            <div class="col-span-2">
+                <Input 
+                    v-model="form.email.value"
+                    label="Correo"
+                    placeholder="Correo"
+                    type="email"
+                    name="email"
+                    :validation-status="form.email.error.status"
+                    :validation-message="form.email.error.message"
+                />
+            </div>
+            <div class="col-span-2">
+                <Input 
+                    v-model="form.phone.value"
+                    label="Teléfono"
+                    placeholder="Teléfono"
+                    type="text"
+                    name="phone"
+                    :validation-status="form.phone.error.status"
+                    :validation-message="form.phone.error.message"
+                />
+            </div>
+        </div>
+        <div class="flex justify-end mt-8 space-x-8">
+            <button @click="back"
+            class="border border-[#FF0000] rounded-2xl py-1 px-6 bg-white hover:bg-[#FF0000] hover:text-white">
+                Cancelar
+            </button>
+            <button @click="submit"
+            class="border border-[#3E4095] rounded-2xl py-1 px-6 bg-white hover:bg-[#3E4095] hover:text-white">
+                Crear
+            </button>
+        </div>
+      </form>
+    </div>
+  </template>
+  
+<script setup>
+import {ref} from 'vue'
+import { crearCliente } from '../../services/clientes.js'
+import Input from '../../components/Forms/Input.vue'
+
+const form = ref({
+    nombre: {
+        value: '',
+        error: {
+            status: '',
+            message: ''
+        }
+    },
+    email: {
+        value: '',
+        error: {
+            status: '',
+            message: ''
+        }
+    },
+    phone: {
+        value: '',
+        error: {
+            status: '',
+            message: ''
+        }
+    
+    }
+})
+
+const back = () => {
+    location.href = '/clientes';
+}
+
+const submit = async (e) => {
+    if(!validar()) return;
+    e.preventDefault();
+    const data = {
+        nombre: form.value.nombre.value,
+        correo: form.value.email.value,
+        telefono: form.value.phone.value
+    }
+    try {
+        const res = await crearCliente(data);
+        if(res.status < 300){
+            location.href = '/clientes';
+        }
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+const validar = ()=>{
+    let valid = true;
+    if(form.value.nombre.value === ''){
+        form.value.nombre.error.status = 'error';
+        form.value.nombre.error.message = 'El nombre es requerido';
+        valid = false;
+    }
+    if(form.value.email.value === ''){
+        form.value.email.error.status = 'error';
+        form.value.email.error.message = 'El correo es requerido';
+        valid = false;
+    }
+    if(form.value.phone.value === ''){
+        form.value.phone.error.status = 'error';
+        form.value.phone.error.message = 'El teléfono es requerido';
+        valid = false;
+    }
+    return valid;
+}
+
+const sub = (e) => {e.preventDefault();}
+</script>
+
+<style scoped>
+</style>
+  
