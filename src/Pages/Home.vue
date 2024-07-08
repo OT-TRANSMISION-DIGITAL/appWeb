@@ -1,12 +1,11 @@
 <template>
   <div class="flex h-full">
     <SideBar />
-    <main class="w-full p-8 mt-16 bg-neutral-100 mb-18">
+    <main class="w-full p-8 mt-16 bg-neutral-100 mb-18 relative">
       <!-- <CrearUser /> -->
       <!-- <CrearCliente /> -->
-      <!-- <Useres /> -->
-      
-    <router-view />
+      <!-- <Users /> -->
+      <router-view />
     </main>
   </div>
   <Footer />
@@ -17,7 +16,7 @@ import Footer from '../layouts/Footer.vue'
 import SideBar from '../layouts/SideBar.vue'
 import CrearUser from '../Pages/Usuarios/Crear.vue'
 import CrearCliente from '../Pages/Clientes/Crear.vue'
-import Useres from '../Pages/Usuarios/Usuarios.vue'
+import Users from '../Pages/Usuarios/Usuarios.vue'
 </script>
 
 <style>

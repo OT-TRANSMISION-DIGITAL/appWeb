@@ -9,6 +9,11 @@ const routes = [
         component: () => import("./Pages/Home.vue"),
         children: [
             {
+                path: "/",
+                name: "Dashboard",
+                component: () => import("./components/Title.vue"),
+            },
+            {
                 path: "/usuarios",
                 component: () => import("./Pages/Usuarios/Usuarios.vue"),
             },
@@ -25,9 +30,29 @@ const routes = [
                 path: "/clientes/crear",
                 name: "CrearClientes",
                 component: () => import("./Pages/Clientes/Crear.vue"),
-            }
+            },
+            {
+                path: "/visitas",
+                name: "Visitas",
+                component: () => import("./Pages/Visitas/Visitas.vue"),
+            },
+            {
+                path: "/visitas/crear",
+                name: "CrearVisitas",
+                component: () => import("./Pages/Visitas/Crear.vue"),
+            },
+            {
+                path: "/ordenes",
+                name: "Ordenes",
+                component: () => import("./Pages/Ordenes/Ordenes.vue"),
+            },
+            {
+                path: "/ordenes/crear",
+                name: "CrearOrdenes",
+                component: () => import("./Pages/Ordenes/Crear.vue"),
+            },
         ],
-        // beforeEnter: verifyToken,
+        beforeEnter: verifyToken,
     },
     {
         path: "/login",

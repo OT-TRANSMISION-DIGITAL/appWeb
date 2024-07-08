@@ -37,6 +37,7 @@ const form = ref({
 const handleSubmit = (e) => {e.preventDefault();}
 const submit = async (e) => {
     e.preventDefault();
+    if(!validate()) return;
     loading.value = true;
     try {
         const response = await login(form.value.email.value, form.value.password.value);
@@ -68,6 +69,7 @@ const verifyCode = async (e) => {
             const {nombre,correo,rol_id,telefono} = response.data.usuario
             localStorage.setItem('token', response.data.token)
             localStorage.setItem('user', JSON.stringify({nombre,correo,rol_id,telefono}))
+            location.href = '/'
         }
     } catch (error) {
         console.log(error);
@@ -75,78 +77,98 @@ const verifyCode = async (e) => {
         loading.value = false;
     }
 }
+const validate = () => {
+    let valid = true;
+    if (!form.value.email.value) {
+        form.value.email.error.status = 'error';
+        form.value.email.error.message = 'El campo email es requerido';
+        valid = false;
+    } else if(form.value.email.error.status === 'error') {
+        form.value.email.error.status = 'success';
+        form.value.email.error.message = 'Correo válido';
+    }
+    if (!form.value.password.value) {
+        form.value.password.error.status = 'error';
+        form.value.password.error.message = 'El campo contraseña es requerido';
+        valid = false;
+    } else if(form.value.password.error.status === 'error') {
+        form.value.password.error.status = 'success';
+        form.value.password.error.message = 'Contraseña válida';
+    }
+    return valid;
+}
 </script>
 
 <template>
-    <div class="min-h-screen flex items-center justify-center bg-neutral-100">
-        <div class="flex flex-row justify-center items-center gap-36 mb-5">
-            <div class="hidden img lg:block">
-                <img :src="imgLogging" alt="logo" width="950"/>
+<div class="min-h-screen flex items-center justify-center bg-neutral-100">
+    <div class="flex flex-col lg:flex-row justify-center items-center lg:gap-36 gap-8 mb-5 px-4">
+        <div v-if="!showCode" class="hidden lg:block">
+            <img :src="imgLogging" alt="logo" class="lg:w-[950px] w-full" />
+        </div>
+        <div class="w-full lg:max-w-[36rem] space-y-10 shadow-md shadow-black px-8 lg:px-16 pt-5 pb-10 lg:pb-16 bg-white border-[#3e4095] border-8">
+            <div class="flex justify-center items-center flex-col mt-5">
+                <img :src="imgLogo" alt="" class="w-40 lg:w-72" />
             </div>
-            <div class="min-w-[36rem] space-y-20 shadow-md shadow-black px-16 pt-5 pb-16 bg-white border-[#3e4095] border-8">
-                <div class="flex justify-center items-center flex-col mt-5">
-                    <img :src="imgLogo" alt="" width="284">
+            <form class="space-y-6 lg:space-y-12 pb-10 lg:pb-14" @submit="handleSubmit($event)">
+                <div v-if="!showCode">
+                    <Input 
+                        v-model="form.email.value"
+                        label="Email"
+                        placeholder="Email"
+                        :validationStatus="form.email.error.status"
+                        :validationMessage="form.email.error.message"
+                        id="email"
+                        type="email"
+                    />
                 </div>
-                <form class="space-y-12 pb-14" @submit="handleSubmit($event)">
-                    <div v-if="!showCode">
-                        <Input 
-                            v-model="form.email.value"
-                            label="Email"
-                            placeholder="Email"
-                            :validationStatus="form.email.error.status"
-                            :validationMessage="form.email.error.message"
-                            id="email"
-                            type="email"
-                        />
+                <div v-if="!showCode">
+                    <Input 
+                        v-model="form.password.value"
+                        label="Contraseña"
+                        placeholder="Contraseña"
+                        :validationStatus="form.password.error.status"
+                        :validationMessage="form.password.error.message"
+                        id="contraseña"
+                        type="password"
+                    />
+                    <div class="flex justify-center items-center mt-4">
+                        <CheckBox>
+                            <template #text>
+                                <p class="text-base text-[#3e4095]">Recordar</p>
+                            </template>
+                        </CheckBox>
                     </div>
-                    <div v-if="!showCode">
-                        <Input 
-                            v-model="form.password.value"
-                            label="Contraseña"
-                            placeholder="Contraseña"
-                            :validationStatus="form.password.error.status"
-                            :validationMessage="form.password.error.message"
-                            id="contraseña"
-                            type="password"
-                        />
-                        <div class="flex justify-center items-center">
-                            <CheckBox>
-                                <template #text>
-                                    <p class="text-base text-[#3e4095]">Recordar</p>
-                                </template>
-                            </CheckBox>
-                        </div>
-                    </div>
-                    <div class="flex justify-center items-center" v-if="!showCode">
-                        <Submit 
-                            :handleClick="submit"
-                            text="Iniciar Sesión"
-                            :disabled="loading"
-                        />
-                    </div>
-                    <div v-if="showCode">
-                        <Input 
-                            v-model="code.value"
-                            label="Código"
-                            placeholder="Código"
-                            :validationStatus="code.error.status"
-                            :validationMessage="code.error.message"
-                            id="code"
-                            type="text"
-                        />
-                    </div>
-                    <div class="flex justify-center items-center" v-if="showCode">
-                        <Submit 
-                            :handleClick="verifyCode"
-                            text="Verificar Código"
-                            :disabled="loading"
-                        />
-                    </div>
-                    
-                </form>
-            </div>
+                </div>
+                <div class="flex justify-center items-center mt-6" v-if="!showCode">
+                    <Submit 
+                        :handleClick="submit"
+                        text="Iniciar Sesión"
+                        :disabled="loading"
+                    />
+                </div>
+                <div v-if="showCode">
+                    <Input 
+                        v-model="code.value"
+                        label="Código"
+                        placeholder="Código"
+                        :validationStatus="code.error.status"
+                        :validationMessage="code.error.message"
+                        id="code"
+                        type="text"
+                    />
+                </div>
+                <div class="flex justify-center items-center mt-6" v-if="showCode">
+                    <Submit 
+                        :handleClick="verifyCode"
+                        text="Verificar Código"
+                        :disabled="loading"
+                    />
+                </div>
+            </form>
         </div>
     </div>
+</div>
+
     <Footer />
 </template>
 
