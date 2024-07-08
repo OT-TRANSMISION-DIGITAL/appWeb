@@ -1,18 +1,18 @@
 <script setup>
 import { onMounted, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
-import { usuarios, deleteUsuario }  from '../../services/usuarios.js'
+import { clientes, deleteCliente }  from '../../services/clientes'
 import Table from '../../components/Tables/Table.vue'
 const router = useRouter();
-const headers = ['Nombre','Correo','Teléfono','Rol'];
-const columns = ['nombre','correo','telefono','rol_id'];
+const headers = ['Nombre','Correo','Teléfono'];
+const columns = ['nombre','correo','telefono'];
 const data = ref([])
 const edit = (id) => {
     console.log('Editando', id);
 }
 const deleted = async (id) => {
     try {
-        const res = await deleteUsuario(id);
+        const res = await deleteCliente(id);
         if(res.status < 300){
             console.log('Eliminado', id);
             location.reload();
@@ -22,13 +22,13 @@ const deleted = async (id) => {
     }
 }
 const addUser = () => {
-    router.push('/usuarios/crear');
+    router.push('/clientes/crear');
 }
 
 onMounted(async () => {
     try {
-        const res = await usuarios();
-        const  d = res.data.data;
+        const res = await clientes();
+        const d = res.data.data;
         data.value = d.map((item) => {
             item['edit'] = edit
             item['delete'] = deleted
@@ -52,7 +52,7 @@ onMounted(async () => {
         <button class="border border-[#3E4095] rounded-2xl py-1 px-5 bg-white hover:bg-[#3E4095] hover:text-white"
             @click="addUser"
         >
-            Nuevo Usuario
+            Nuevo Cliente
         </button>
         </div>
         <Table 

@@ -2,9 +2,9 @@ import { createApp } from 'vue'
 import App from './App.vue'
 import router from './routes'
 
+import 'flowbite/dist/flowbite.min.css';
 import './style.css'
 
-import '../node_modules/flowbite-vue/dist/index.css'
 createApp(App)
 .use(router)
 .mount('#app')
