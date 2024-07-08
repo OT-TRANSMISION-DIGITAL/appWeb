@@ -1,6 +1,6 @@
 <template>
     <div class="relative mb-6 font-sans text-[#3E4095] text-2xl">
-      <label :for="id" :class="['text-[#3E4095]  '+labelClass, { 'shrink': isFocused || modelValue }]">{{ label }}</label>
+      <label :for="id" :class="['text-[#3E4095]  '+labelClass, { 'shrink': isFocused || modelValue || (type == 'date') }]">{{ label }}</label>
       <input
         :type="type"
         :id="id"
@@ -83,9 +83,9 @@
   const messagePrefix = computed(() => {
     switch (props.validationStatus) {
       case 'success':
-        return 'Well done!';
+        return '';
       case 'error':
-        return 'Oh, snapp!';
+        return '';
       default:
         return '';
     }
@@ -109,6 +109,9 @@
     text-align: start;
     color: #3E4095;
     line-height: 2rem/* 32px */;
+  }
+  input{
+    color: black  !important;
   }
   </style>
   
