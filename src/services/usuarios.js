@@ -8,6 +8,14 @@ export const usuarios = async () => {
         return Promise.reject(error);
     }
 }
+export const tecnicos = async () => {
+    try {
+        const response = await axios.get('tecnicos');
+        return response;
+    } catch (error) {
+        return Promise.reject(error);
+    }
+}
 
 export const deleteUsuario = async (id) => {
     try {
@@ -21,6 +29,15 @@ export const deleteUsuario = async (id) => {
 export const crearUsuario = async (usuario) => {
     try {
         const response = await axios.post('registrar', usuario);
+        return response;
+    } catch (error) {
+        return Promise.reject(error);
+    }
+}
+
+export const user = async () => {
+    try {
+        const response = await axios.get(`user`);
         return response;
     } catch (error) {
         return Promise.reject(error);
