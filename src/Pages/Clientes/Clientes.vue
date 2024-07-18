@@ -9,6 +9,7 @@ const columns = ['nombre','correo','telefono'];
 const data = ref([])
 const edit = (id) => {
     console.log('Editando', id);
+    router.push(`/clientes/${id}`);
 }
 const deleted = async (id) => {
     try {
@@ -49,16 +50,13 @@ onMounted(async () => {
             >
                 Agregar Usuario
             </fwb-button> -->
-        <button class="border border-[#3E4095] rounded-2xl py-1 px-5 bg-white hover:bg-[#3E4095] hover:text-white"
-            @click="addUser"
-        >
-            Nuevo Cliente
-        </button>
         </div>
         <Table 
             :columns="columns"
             :headers="headers"
             :data="data"
+            btn-text="Agregar Cliente"
+            :btn-action="addUser"
         />
     </div>
 </template>
