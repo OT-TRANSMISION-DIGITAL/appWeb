@@ -2,6 +2,7 @@
 
 import axios from 'axios';
 
+// const URL_API = 'http://localhost:8000/api';
 const URL_API = import.meta.env.VITE_API_URL;
 
 const instance = axios.create({

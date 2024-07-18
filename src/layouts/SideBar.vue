@@ -10,7 +10,7 @@
       <button 
         @click="logOut"
       class="border border-[#3E4095] rounded-2xl py-1 px-6 bg-white hover:bg-[#3E4095] hover:text-white">
-        Log Out
+        Cerrar sesión
       </button>
     </div>
     <hr class="border-[#3E4095] mt-5 border-2" />
@@ -102,18 +102,18 @@ const logOut = async () => {
     if (res.status < 300) {
       localStorage.removeItem('token')
       localStorage.removeItem('user')
-      location.href = '/login'
+      location.href = 'login'
     }else{
       console.log(res)
       localStorage.removeItem('token')
       localStorage.removeItem('user')
-      location.href = '/login'
+      location.href = 'login'
     }
   } catch (error) {
     console.log(error)
     localStorage.removeItem('token')
     localStorage.removeItem('user')
-    location.href = '/login'
+    location.href = 'login'
   }
 }
 
