@@ -9,6 +9,7 @@ const columns = ['motivo','direccion','cliente_id', 'tecnico_id', 'sucursal_id',
 const data = ref([])
 const edit = (id) => {
     console.log('Editando', id);
+    router.push(`/visitas/${id}`);
 }
 const deleted = async (id) => {
     try {
@@ -33,6 +34,9 @@ onMounted(async () => {
         data.value = d.map((item) => {
             item['edit'] = edit
             item['delete'] = deleted
+            item.cliente_id = item.cliente.nombre;
+            item.tecnico_id = item.tecnico.nombre;
+            item.sucursal_id = item.sucursal.nombre;
             return item;
         });
     } catch (error) {
@@ -50,16 +54,13 @@ onMounted(async () => {
             >
                 Agregar Usuario
             </fwb-button> -->
-        <button class="border border-[#3E4095] rounded-2xl py-1 px-5 bg-white hover:bg-[#3E4095] hover:text-white"
-            @click="addUser"
-        >
-            Nueva Visita
-        </button>
         </div>
         <Table 
             :columns="columns"
             :headers="headers"
             :data="data"
+            btn-text="Agregar Visita"
+            :btn-action="addUser"
         />
     </div>
 </template>

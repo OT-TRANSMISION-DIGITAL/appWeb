@@ -113,11 +113,12 @@
   
 <script setup>
 import {ref, onMounted} from 'vue'
-import { crear } from '../../services/visitas.js'
+import { editar, visita } from '../../services/visitas.js'
 import Input from '../../components/Forms/Input.vue'
 import { clientes as clis } from '../../services/clientes.js'
 import { tecnicos as tecs } from '../../services/usuarios.js'
-
+import { useRoute } from 'vue-router'
+const route = useRoute()
 const clientes = ref([]);
 const tecnicos = ref([]);
 const sucursales = ref([]);
@@ -182,7 +183,7 @@ const form = ref({
 })
 
 const back = () => {
-    location.href = '';
+    location.href = '/visitas';
 }
 
 const submit = async (e) => {
@@ -209,10 +210,10 @@ const submit = async (e) => {
         sucursal_id: form.value.sucursal_id.value
     }
     try {
-        const res = await crear(data);
+        const res = await editar(route.params.id,data);
         if(res.status < 300){
             setTimeout(() => {
-                location.href = 'visitas';
+                location.href = '/visitas';
             }, 3000);
         }
     } catch (error) {
@@ -293,6 +294,19 @@ onMounted(async ()=>{
         if(resTecnicos.status < 300){
             tecnicos.value = resTecnicos.data;
             console.log(tecnicos.value);
+        }
+        const resVisita = await visita(route.params.id);
+        console.log(resVisita);
+        if(resVisita.status < 300){
+            form.value.motivo.value = resVisita.data.motivo;
+            form.value.fechaHoraSolicitud.value = resVisita.data.fechaHoraSolicitud;
+            form.value.fechaHoraLlegada.value = resVisita.data.fechaHoraLlegada;
+            form.value.fechaHoraSalida.value = resVisita.data.fechaHoraSalida;
+            form.value.direccion.value = resVisita.data.direccion;
+            form.value.cliente_id.value = resVisita.data.cliente_id;
+            form.value.tecnico_id.value = resVisita.data.tecnico_id;
+            form.value.sucursal_id.value = resVisita.data.sucursal_id;
+            changeCliente(resVisita.data.cliente_id);
         }
     } catch (error) {
         console.log(error);

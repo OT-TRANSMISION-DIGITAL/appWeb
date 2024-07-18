@@ -9,6 +9,15 @@ export const visitas = async () => {
     }
 }
 
+export const visita = async (id) => {
+    try {
+        const response = await axios.get(`visitas/${id}`);
+        return response;
+    } catch (error) {
+        return Promise.reject(error);
+    }
+}
+
 export const del = async (id) => {
     try {
         const response = await axios.patch(`visitas/cancelar/${id}`);
@@ -21,6 +30,15 @@ export const del = async (id) => {
 export const crear = async (visita) => {
     try {
         const response = await axios.post('visitas', visita);
+        return response;
+    } catch (error) {
+        return Promise.reject(error);
+    }
+}
+
+export const editar = async (id, visita) => {
+    try {
+        const response = await axios.put(`visitas/${id}`, visita);
         return response;
     } catch (error) {
         return Promise.reject(error);
