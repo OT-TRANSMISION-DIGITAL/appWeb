@@ -1,15 +1,19 @@
 <template>
-    <div class="relative mb-6 font-sans text-[#3E4095] text-2xl">
-      <label :for="id" :class="['text-[#3E4095]  '+labelClass, { 'shrink': isFocused || modelValue || (type == 'date') }]">{{ label }}</label>
+    <div class="relative mb-6 font-sans text-[#3E4095] text-2xl"
+      @click="click"
+    >
+      <label :for="id" :class="['text-[#3E4095]  '+labelClass, { 'shrink': isFocused || modelValue || (type == 'date' || type == 'datetime-local') }]">{{ label }}</label>
       <input
         :type="type"
         :id="id"
-        :class="'border-0 border-b-4 placeholder-opacity-60 focus:border-0 text-2xl  px-4 py-2 ' + inputClass"
+        :class="'border-0 border-b-4 placeholder-opacity-60 focus:border-0 text-2xl  px-4 py-2 z-[0]' + inputClass"
         :placeholder="isFocused ? '' : placeholder"
         :value="modelValue"
         @input="handleInput"
         @focus="isFocused = true"
         @blur="handleBlur"
+        :disabled="disabled"
+        ref="inputRef"
       />
       <p :class="messageClass">
         <span class="font-medium">{{ messagePrefix }}</span> {{ validationMessage }}
@@ -19,15 +23,17 @@
   
   <script lang="ts" setup>
   import { ref, computed, defineProps, defineEmits, watch } from 'vue';
-  
+  const inputRef = ref<HTMLInputElement | null>(null);
   const props = defineProps<{
     modelValue: string;
-    label: string;
-    placeholder: string;
+    click?: () => void;
+    label?: string;
+    disabled?: boolean;
+    placeholder?: string;
     validationStatus: 'default' | 'success' | 'error';
     validationMessage: string;
-    id: string;
-    type: string;
+    id?: string;
+    type?: string;
   }>();
   
   const emit = defineEmits(['update:modelValue']);

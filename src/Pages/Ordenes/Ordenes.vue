@@ -1,7 +1,7 @@
 <script setup>
 import { onMounted, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
-import { ordenes, del }  from '../../services/ordenes.js'
+import { ordenes, del, cancel, autorizar }  from '../../services/ordenes.js'
 import Table from '../../components/Tables/Table.vue'
 const router = useRouter();
 const headers = ['Solicitante','Dirección','Cliente', 'Técnico', 'Sucursal', 'Fecha', 'Estado'];
@@ -9,6 +9,29 @@ const columns = ['persona_solicitante','direccion','cliente_id', 'tecnico_id', '
 const data = ref([])
 const edit = (id) => {
     console.log('Editando', id);
+    router.push(`/ordenes/${id}`);
+}
+const cancelar = async (id) => {
+    try {
+        const res = await cancel(id);
+        if(res.status < 300){
+            console.log('Cancelado', id);
+            location.reload();
+        }
+    } catch (error) {
+        console.log(error);
+    }
+}
+const auto = async (id) => {
+    try {
+        const res = await autorizar(id);
+        if(res.status < 300){
+            console.log('Autorizado', id);
+            location.reload();
+        }
+    } catch (error) {
+        console.log(error);
+    }
 }
 const deleted = async (id) => {
     try {
@@ -33,6 +56,15 @@ onMounted(async () => {
         data.value = d.map((item) => {
             item['edit'] = edit
             item['delete'] = deleted
+            item.cliente_id = item.cliente.nombre;
+            item.tecnico_id = item.tecnico.nombre;
+            item.sucursal_id = item.sucursal.nombre;
+            if(item.estatus == 'Sin Autorizar'){
+                item['success'] = auto
+                item['cancel'] = cancelar
+            }else if(item.estatus == 'Autorizada'){
+                item['cancel'] = cancelar
+            }
             return item;
         });
     } catch (error) {
@@ -50,16 +82,13 @@ onMounted(async () => {
             >
                 Agregar Usuario
             </fwb-button> -->
-        <button class="border border-[#3E4095] rounded-2xl py-1 px-5 bg-white hover:bg-[#3E4095] hover:text-white"
-            @click="addUser"
-        >
-            Nueva Visita
-        </button>
         </div>
         <Table 
             :columns="columns"
             :headers="headers"
             :data="data"
+            btn-text="Agregar Orden"
+            :btn-action="addUser"
         />
     </div>
 </template>

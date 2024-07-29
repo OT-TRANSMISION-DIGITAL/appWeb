@@ -3,7 +3,7 @@
       <form class="w-auto max-w-4xl p-8 bg-white border-4 border-[#3E4095] rounded-md shadow-md"
         @submit="sub($event)"
       >
-        <h2 class="mb-12 text-4xl font-bold text-center text-[#3E4095]">Registrar Visitas</h2>
+        <h2 class="mb-12 text-4xl font-bold text-center text-[#3E4095]">Editar Visitas</h2>
         <div class="grid grid-cols-2 gap-10 mt-5">
             <div class="col-span-1">
                 <Input 
@@ -104,7 +104,7 @@
             </button>
             <button @click="submit"
             class="border border-[#3E4095] rounded-2xl py-1 px-6 bg-white hover:bg-[#3E4095] hover:text-white">
-                Crear
+                Editar
             </button>
         </div>
       </form>
@@ -113,12 +113,13 @@
   
 <script setup>
 import {ref, onMounted} from 'vue'
-import {useRouter} from 'vue-router'
-import { crear } from '../../services/visitas.js'
+import { editar, visita } from '../../services/visitas.js'
 import Input from '../../components/Forms/Input.vue'
 import { clientes as clis } from '../../services/clientes.js'
 import { tecnicos as tecs } from '../../services/usuarios.js'
-const router = useRouter();
+import { useRoute, useRouter } from 'vue-router'
+const route = useRoute()
+const router = useRouter()
 const clientes = ref([]);
 const tecnicos = ref([]);
 const sucursales = ref([]);
@@ -210,7 +211,7 @@ const submit = async (e) => {
         sucursal_id: form.value.sucursal_id.value
     }
     try {
-        const res = await crear(data);
+        const res = await editar(route.params.id,data);
         if(res.status < 300){
             setTimeout(() => {
                 router.push('/visitas');
@@ -294,6 +295,19 @@ onMounted(async ()=>{
         if(resTecnicos.status < 300){
             tecnicos.value = resTecnicos.data;
             console.log(tecnicos.value);
+        }
+        const resVisita = await visita(route.params.id);
+        console.log(resVisita);
+        if(resVisita.status < 300){
+            form.value.motivo.value = resVisita.data.motivo;
+            form.value.fechaHoraSolicitud.value = resVisita.data.fechaHoraSolicitud;
+            form.value.fechaHoraLlegada.value = resVisita.data.fechaHoraLlegada;
+            form.value.fechaHoraSalida.value = resVisita.data.fechaHoraSalida;
+            form.value.direccion.value = resVisita.data.direccion;
+            form.value.cliente_id.value = resVisita.data.cliente_id;
+            form.value.tecnico_id.value = resVisita.data.tecnico_id;
+            form.value.sucursal_id.value = resVisita.data.sucursal_id;
+            changeCliente(resVisita.data.cliente_id);
         }
     } catch (error) {
         console.log(error);

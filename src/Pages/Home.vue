@@ -1,12 +1,14 @@
 <template>
-  <div class="flex h-full">
+  <div class="flex">
     <SideBar />
-    <main class="w-full p-8 mt-16 bg-neutral-100 mb-18 relative">
-      <!-- <CrearUser /> -->
-      <!-- <CrearCliente /> -->
-      <!-- <Users /> -->
-      <router-view />
-    </main>
+    <div class="flex-1">
+      <router-view name="title" />
+      <main class="w-full p-8 mt-5 bg-neutral-100 mb-18 relative h-[92%]">
+        <router-view 
+          name="default"
+        />
+      </main>
+    </div>
   </div>
   <Footer />
 </template>

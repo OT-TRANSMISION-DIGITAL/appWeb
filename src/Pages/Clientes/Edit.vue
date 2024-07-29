@@ -3,7 +3,7 @@
       <form class="w-auto max-w-4xl p-8 bg-white border-4 border-[#3E4095] rounded-md shadow-md"
         @submit="sub($event)"
       >
-        <h2 class="mb-5 text-4xl font-bold text-center text-[#3E4095]">Registrar Cliente</h2>
+        <h2 class="mb-7 text-4xl font-bold text-center text-[#3E4095]">Actualizar Cliente</h2>
         <div class="grid grid-cols-2 gap-10 mt-5">
             <div class="col-span-2">
                 <Input 
@@ -54,7 +54,7 @@
             </button>
             <button @click="submit"
             class="border border-[#3E4095] rounded-2xl py-1 px-6 bg-white hover:bg-[#3E4095] hover:text-white">
-                Crear
+                Actualizar
             </button>
         </div>
       </form>
@@ -63,11 +63,12 @@
   
 <script setup>
 import {onMounted, ref} from 'vue'
-import { useRouter } from 'vue-router'
-import { crearCliente } from '../../services/clientes.js'
+import { useRoute, useRouter } from 'vue-router'
+import { cliente, editarCliente } from '../../services/clientes.js'
 import Input from '../../components/Forms/Input.vue'
 import Loading from '../../components/Forms/Loading.vue'
 import { formatPhoneNumber, isEmail, isValidPhoneNumber } from '../../global/Validators.js'
+const route = useRoute();
 const router = useRouter();
 const loading = ref(false);
 const form = ref({
@@ -96,7 +97,7 @@ const form = ref({
 const error = ref('');
 
 const back = () => {
-    router.push('/clientes')
+    router.push('/clientes');
 }
 
 const submit = async (e) => {
@@ -109,9 +110,9 @@ const submit = async (e) => {
         telefono: form.value.phone.value.replaceAll(' ','').replaceAll('-','')
     }
     try {
-        const res = await crearCliente(data);
+        const res = await editarCliente(route.params.id,data);
         if(res.status < 300){
-            router.push('/clientes')
+            router.push('/clientes');
         }
     } catch (err) {
         console.error(err);
@@ -152,6 +153,20 @@ const validar = () => {
 }
 
 const sub = (e) => {e.preventDefault();}
+
+onMounted(async () => {
+    try {
+        const clienteRes = await cliente(route.params.id);
+        if(clienteRes.status < 300){
+            const c = clienteRes.data;
+            form.value.nombre.value = c.nombre;
+            form.value.email.value = c.correo;
+            form.value.phone.value = c.telefono;
+        }
+    } catch (e) {
+     console.e(e);   
+    }
+})
 
 </script>
 

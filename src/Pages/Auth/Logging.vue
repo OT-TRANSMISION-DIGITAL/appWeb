@@ -1,14 +1,17 @@
 <script setup>
 import { ref } from 'vue';
+import { useRouter } from 'vue-router';
 import Input from '../../components/Forms/Input.vue';
 import Submit from '../../components/Forms/Submit.vue';
 import CheckBox from '../../components/Forms/CheckBox.vue';
 import Footer from '../../layouts/Footer.vue';
 import imgLogging from '../../assets/logging.svg'
-import imgLogo from '../../assets/OT_logo_light.jpeg'
+import imgLogo from '../../assets/OT_logo_light.png'
 import axios from 'axios';
 import { login } from '../../services/sesion.js'
+const router = useRouter();
 const showCode = ref(false);
+const error = ref('');
 const urlSigned = ref('');
 const loading = ref(false);
 const code = ref({
@@ -41,25 +44,25 @@ const submit = async (e) => {
     loading.value = true;
     try {
         const response = await login(form.value.email.value, form.value.password.value);
-        console.log(response);
         if (response.status == 200) {
             if(response.data.rutaFirmada){
                 showCode.value = true;
                 urlSigned.value = response.data.rutaFirmada.replace(/\//g, ' ').replaceAll(' ', '/');
             }else{
                 localStorage.setItem('token', response.data.token)
-                window.location.href = '/'
+                router.push('/')
             }
         }
-    } catch (error) {
-        console.log(error);
+    } catch (err) {
+        console.error(err);
+        error.value = err.response.data.message || err.response.data.msg || 'Error en el servidor al iniciar sesión';
     }finally{
         loading.value = false;
     }
 }
 const verifyCode = async (e) => {
     e.preventDefault();
-    console.log('verifying code', code.value);
+    loading.value = true;
     try {
         const response = await axios.post(urlSigned.value, {
             codigo: code.value.value
@@ -69,10 +72,11 @@ const verifyCode = async (e) => {
             const {nombre,correo,rol_id,telefono} = response.data.usuario
             localStorage.setItem('token', response.data.token)
             localStorage.setItem('user', JSON.stringify({nombre,correo,rol_id,telefono}))
-            location.href = '/'
+            router.push('/')
         }
-    } catch (error) {
-        console.log(error);
+    } catch (err) {
+        console.error(err);
+        error.value = err.response.data.message || err.response.data.msg || 'Error en el servidor al iniciar sesión';
     }finally{
         loading.value = false;
     }
@@ -139,13 +143,6 @@ const validate = () => {
                         </CheckBox>
                     </div>
                 </div>
-                <div class="flex justify-center items-center mt-6" v-if="!showCode">
-                    <Submit 
-                        :handleClick="submit"
-                        text="Iniciar Sesión"
-                        :disabled="loading"
-                    />
-                </div>
                 <div v-if="showCode">
                     <Input 
                         v-model="code.value"
@@ -157,11 +154,22 @@ const validate = () => {
                         type="text"
                     />
                 </div>
+                <!-- Span Error general API -->
+                <div class="flex justify-center items-center" v-if="error">
+                    <p class="text-red-500 text-sm">{{ error }}</p>
+                </div>
+                <div class="flex justify-center items-center mt-6" v-if="!showCode">
+                    <Submit 
+                        :handleClick="submit"
+                        text="Iniciar Sesión"
+                        :loading="loading"
+                    />
+                </div>
                 <div class="flex justify-center items-center mt-6" v-if="showCode">
                     <Submit 
                         :handleClick="verifyCode"
                         text="Verificar Código"
-                        :disabled="loading"
+                        :loading="loading"
                     />
                 </div>
             </form>
@@ -169,7 +177,7 @@ const validate = () => {
     </div>
 </div>
 
-    <Footer />
+    <!-- <Footer /> -->
 </template>
 
 <style scoped>

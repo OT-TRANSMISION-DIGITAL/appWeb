@@ -2,7 +2,7 @@
     <div class="flex justify-center mt-5">
         <form class="w-auto max-w-4xl p-8 bg-white border-4 border-[#3E4095] rounded-md shadow-md"
             @submit="sub($event)">
-            <h2 class="mb-12 text-4xl font-bold text-center text-[#3E4095]">Registrar Orden</h2>
+            <h2 class="mb-12 text-4xl font-bold text-center text-[#3E4095]">Editar Orden</h2>
             <div class="grid grid-cols-2 gap-10 mt-5">
                 <div class="col-span-1">
                     <Input v-model="form.persona_solicitante.value" label="Nombre del solicitante"
@@ -42,7 +42,7 @@
                     <label for="countries"
                         class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Seleccione un
                         Cliente</label>
-                    <select v-model="form.cliente_id.value" @change="changeCliente($event.target.value)" id="countries"
+                    <select ref="selectCliente" v-model="form.cliente_id.value" @change="changeCliente($event.target.value)" id="countries"
                         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                         <option selected disabled>Elija una opción</option>
                         <option v-for="rol in clientes" :value="rol.id">{{ rol.nombre }}</option>
@@ -101,7 +101,7 @@
                 </button>
                 <button @click="submit"
                     class="border border-[#3E4095] rounded-2xl py-1 px-6 bg-white hover:bg-[#3E4095] hover:text-white">
-                    Crear
+                    Editar
                 </button>
             </div>
 
@@ -194,16 +194,18 @@
 
 <script setup>
 import { ref, onMounted } from 'vue'
-import { useRouter } from 'vue-router'
-import { crear } from '../../services/ordenes.js'
+import { orden, editar } from '../../services/ordenes.js'
 import Input from '../../components/Forms/Input.vue'
 import { clientes as clis } from '../../services/clientes.js'
 import { tecnicos as tecs } from '../../services/usuarios.js'
 import { productos as prods } from '../../services/productos.js'
+import { useRoute, useRouter } from 'vue-router'
+import { parseAndFormatDate } from '../../global/Parser.js'
+
+const route = useRoute();
 const router = useRouter();
-
 const showModal = ref(false);
-
+const selectCliente = ref(null)
 const clientes = ref([]);
 const tecnicos = ref([]);
 const sucursales = ref([]);
@@ -307,7 +309,7 @@ const form = ref({
 })
 
 const back = () => {
-    router.push('/ordenes')
+    router.push('/ordenes');
 }
 
 const error = ref('');
@@ -342,15 +344,15 @@ const submit = async (e) => {
         }))
     }
     try {
-        const res = await crear(data);
+        const res = await editar(route.params.id,data);
         if (res.status < 300) {
             setTimeout(() => {
-                router.push('/ordenes')
+                router.push('/ordenes');
             }, 3000);
         }
-    } catch (error) {
-        console.log(error);
-        error.value = err.response.data.message || err.response.data.msg || 'Error en el servidor al iniciar sesión';
+    } catch (err) {
+        console.log(err);
+        error.value = err.response.data.message || err.response.data.msg || 'Error en el servidor';
     }
 }
 
@@ -498,20 +500,55 @@ const sub = (e) => { e.preventDefault(); }
 
 onMounted(async () => {
     try {
-        const resClientes = await clis();
+        const allPromises = await Promise.all([clis(), tecs(), prods()]);
+        const resClientes = allPromises[0];
         if (resClientes.status < 300) {
             clientes.value = resClientes.data.data;
-            console.log(clientes.value);
         }
-        const resTecnicos = await tecs();
+        const resTecnicos = allPromises[1];
         if (resTecnicos.status < 300) {
             tecnicos.value = resTecnicos.data;
-            console.log(tecnicos.value);
         }
-        const resProductos = await prods();
+        const resProductos = allPromises[2];
         if (resProductos.status < 300) {
             productos.value = resProductos.data.data;
-            console.log(productos.value);
+        }
+        const resOrden = await orden(route.params.id);
+        if(resOrden.status < 300){
+            const o = resOrden.data;
+            form.value.persona_solicitante.value = o.persona_solicitante;
+            form.value.puesto.value = o.puesto;
+            form.value.fechaHoraSolicitud.value = o.fechaHoraSolicitud;
+            form.value.fechaHoraLlegada.value = o.fechaHoraLlegada;
+            form.value.fechaHoraSalida.value = o.fechaHoraSalida;
+            form.value.direccion.value = o.direccion;
+            form.value.cliente_id.value = o.cliente_id;
+            changeCliente(o.cliente_id);
+            form.value.tecnico_id.value = o.tecnico_id;
+            form.value.sucursal_id.value = o.sucursal_id;
+            form.value.detalles.value = o.detalles.map(d => ({
+                cantidad: {
+                    value: String(d.cantidad),
+                    error: {
+                        status: 'default',
+                        message: ''
+                    }
+                },
+                descripcion: {
+                    value: d.descripcion,
+                    error: {
+                        status: 'default',
+                        message: ''
+                    }
+                },
+                producto_id: {
+                    value: d.producto_id,
+                    error: {
+                        status: 'default',
+                        message: ''
+                    }
+                }
+            }));
         }
     } catch (error) {
         console.log(error);

@@ -2,23 +2,25 @@ import { user } from '../services/usuarios.js';
 
 async function verifyToken(to, from, next) {
     const token = localStorage.getItem('token');
-    if (!token) return location.href = '/login';
+    if (!token) { to.path === '/login' ? next() : next({name: 'Login'}); return;}
     try {
         const userResponse = await user();
         if (userResponse.status < 300) {
-            console.log(userResponse.data)
-            return next();
+            to.path === '/login' ? next({name: 'Dashboard'}) : next();
+            return;
         }else{
             console.log(userResponse);
             localStorage.removeItem('token');
             localStorage.removeItem('user');
-            return location.href = '/login';
+            next({name: 'Login'});
+            return;
         }
     } catch (error) {
         console.log(error);
         localStorage.removeItem('token');
         localStorage.removeItem('user');
-        return location.href = '/login';   
+        next({name: 'Login'});
+        return;
     }
 }
 
