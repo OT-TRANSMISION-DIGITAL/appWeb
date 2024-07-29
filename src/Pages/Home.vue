@@ -2,11 +2,11 @@
   <div class="flex">
     <SideBar />
     <div class="flex-1">
-      <h1 class="text-white mt-5 pl-4 text-5xl font-bold">
-        Titulo
-      </h1>
+      <router-view name="title" />
       <main class="w-full p-8 mt-5 bg-neutral-100 mb-18 relative h-[92%]">
-        <router-view />
+        <router-view 
+          name="default"
+        />
       </main>
     </div>
   </div>

@@ -10,7 +10,13 @@ export default defineConfig({
   ],
   base: "./",
   build: {
-    outDir: "dist"
+    outDir: 'dist',
+    assetsDir: 'assets',
+    rollupOptions: {
+      input: {
+        main: 'index.html' // Asegúrate de que este sea el archivo principal
+      }
+    }
   },
   resolve: {
     alias: {

@@ -44,3 +44,32 @@ export const editar = async (id, visita) => {
         return Promise.reject(error);
     }
 }
+
+
+
+export const cancel  = async (id) => {
+    try {
+        const response = await axios.patch(`visitas/cancelar/${id}`);
+        return response;
+    } catch (error) {
+        return Promise.reject(error);
+    }
+}
+
+export const finalizar = async (id) => {
+    try {
+        const response = await axios.patch(`visitas/finalizar/${id}`);
+        return response;
+    } catch (error) {
+        return Promise.reject(error);
+    }
+}
+
+export const autorizar = async (id) => {
+    try {
+        const response = await axios.patch(`visitas/autorizar/${id}`);
+        return response;
+    } catch (error) {
+        return Promise.reject(error);
+    }
+}

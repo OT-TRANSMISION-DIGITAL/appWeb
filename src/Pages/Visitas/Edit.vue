@@ -3,7 +3,7 @@
       <form class="w-auto max-w-4xl p-8 bg-white border-4 border-[#3E4095] rounded-md shadow-md"
         @submit="sub($event)"
       >
-        <h2 class="mb-12 text-4xl font-bold text-center text-[#3E4095]">Registrar Visitas</h2>
+        <h2 class="mb-12 text-4xl font-bold text-center text-[#3E4095]">Editar Visitas</h2>
         <div class="grid grid-cols-2 gap-10 mt-5">
             <div class="col-span-1">
                 <Input 
@@ -104,7 +104,7 @@
             </button>
             <button @click="submit"
             class="border border-[#3E4095] rounded-2xl py-1 px-6 bg-white hover:bg-[#3E4095] hover:text-white">
-                Crear
+                Editar
             </button>
         </div>
       </form>
@@ -117,8 +117,9 @@ import { editar, visita } from '../../services/visitas.js'
 import Input from '../../components/Forms/Input.vue'
 import { clientes as clis } from '../../services/clientes.js'
 import { tecnicos as tecs } from '../../services/usuarios.js'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 const route = useRoute()
+const router = useRouter()
 const clientes = ref([]);
 const tecnicos = ref([]);
 const sucursales = ref([]);
@@ -183,7 +184,7 @@ const form = ref({
 })
 
 const back = () => {
-    location.href = '/visitas';
+    router.push('/visitas');
 }
 
 const submit = async (e) => {
@@ -213,7 +214,7 @@ const submit = async (e) => {
         const res = await editar(route.params.id,data);
         if(res.status < 300){
             setTimeout(() => {
-                location.href = '/visitas';
+                router.push('/visitas');
             }, 3000);
         }
     } catch (error) {

@@ -194,11 +194,13 @@
 
 <script setup>
 import { ref, onMounted } from 'vue'
+import { useRouter } from 'vue-router'
 import { crear } from '../../services/ordenes.js'
 import Input from '../../components/Forms/Input.vue'
 import { clientes as clis } from '../../services/clientes.js'
 import { tecnicos as tecs } from '../../services/usuarios.js'
 import { productos as prods } from '../../services/productos.js'
+const router = useRouter();
 
 const showModal = ref(false);
 
@@ -305,7 +307,7 @@ const form = ref({
 })
 
 const back = () => {
-    location.href = 'ordenes';
+    router.push('/ordenes')
 }
 
 const error = ref('');
@@ -339,12 +341,11 @@ const submit = async (e) => {
             producto_id: detalle.producto_id.value
         }))
     }
-    return console.log(data);
     try {
         const res = await crear(data);
         if (res.status < 300) {
             setTimeout(() => {
-                location.href = 'ordenes';
+                router.push('/ordenes')
             }, 3000);
         }
     } catch (error) {

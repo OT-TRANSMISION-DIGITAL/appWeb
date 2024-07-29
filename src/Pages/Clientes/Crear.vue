@@ -63,10 +63,12 @@
   
 <script setup>
 import {onMounted, ref} from 'vue'
+import { useRouter } from 'vue-router'
 import { crearCliente } from '../../services/clientes.js'
 import Input from '../../components/Forms/Input.vue'
 import Loading from '../../components/Forms/Loading.vue'
 import { formatPhoneNumber, isEmail, isValidPhoneNumber } from '../../global/Validators.js'
+const router = useRouter();
 const loading = ref(false);
 const form = ref({
     nombre: {
@@ -94,7 +96,7 @@ const form = ref({
 const error = ref('');
 
 const back = () => {
-    location.href = 'clientes';
+    router.push('/clientes')
 }
 
 const submit = async (e) => {
@@ -109,7 +111,7 @@ const submit = async (e) => {
     try {
         const res = await crearCliente(data);
         if(res.status < 300){
-            location.href = 'clientes';
+            router.push('/clientes')
         }
     } catch (err) {
         console.error(err);

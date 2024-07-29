@@ -113,11 +113,12 @@
   
 <script setup>
 import {ref, onMounted} from 'vue'
+import {useRouter} from 'vue-router'
 import { crear } from '../../services/visitas.js'
 import Input from '../../components/Forms/Input.vue'
 import { clientes as clis } from '../../services/clientes.js'
 import { tecnicos as tecs } from '../../services/usuarios.js'
-
+const router = useRouter();
 const clientes = ref([]);
 const tecnicos = ref([]);
 const sucursales = ref([]);
@@ -182,7 +183,7 @@ const form = ref({
 })
 
 const back = () => {
-    location.href = '';
+    router.push('/visitas');
 }
 
 const submit = async (e) => {
@@ -212,7 +213,7 @@ const submit = async (e) => {
         const res = await crear(data);
         if(res.status < 300){
             setTimeout(() => {
-                location.href = 'visitas';
+                router.push('/visitas');
             }, 3000);
         }
     } catch (error) {

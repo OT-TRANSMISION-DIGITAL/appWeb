@@ -29,11 +29,17 @@ onMounted(async () => {
     try {
         const res = await usuarios();
         const  d = res.data.data;
-        data.value = d.map((item) => {
+        d.map((item) => {
             item['edit'] = edit
             item['delete'] = deleted
+            item.rol_id = item.rol.nombre;
             return item;
         });
+        data.value = d;
+        data.value.push(...d)
+        data.value.push(...d)
+        data.value.push(...d)
+        data.value.push(...d)
     } catch (error) {
         console.log(error);
     }
@@ -49,16 +55,13 @@ onMounted(async () => {
             >
                 Agregar Usuario
             </fwb-button> -->
-        <button class="border border-[#3E4095] rounded-2xl py-1 px-5 bg-white hover:bg-[#3E4095] hover:text-white"
-            @click="addUser"
-        >
-            Nuevo Usuario
-        </button>
         </div>
         <Table 
             :columns="columns"
             :headers="headers"
             :data="data"
+            btn-text="Agregar Usuario"
+            :btn-action="addUser"
         />
     </div>
 </template>

@@ -1,5 +1,6 @@
 <script setup>
 import { ref } from 'vue';
+import { useRouter } from 'vue-router';
 import Input from '../../components/Forms/Input.vue';
 import Submit from '../../components/Forms/Submit.vue';
 import CheckBox from '../../components/Forms/CheckBox.vue';
@@ -8,6 +9,7 @@ import imgLogging from '../../assets/logging.svg'
 import imgLogo from '../../assets/OT_logo_light.png'
 import axios from 'axios';
 import { login } from '../../services/sesion.js'
+const router = useRouter();
 const showCode = ref(false);
 const error = ref('');
 const urlSigned = ref('');
@@ -48,7 +50,7 @@ const submit = async (e) => {
                 urlSigned.value = response.data.rutaFirmada.replace(/\//g, ' ').replaceAll(' ', '/');
             }else{
                 localStorage.setItem('token', response.data.token)
-                window.location.href = ''
+                router.push('/')
             }
         }
     } catch (err) {
@@ -70,7 +72,7 @@ const verifyCode = async (e) => {
             const {nombre,correo,rol_id,telefono} = response.data.usuario
             localStorage.setItem('token', response.data.token)
             localStorage.setItem('user', JSON.stringify({nombre,correo,rol_id,telefono}))
-            location.href = ''
+            router.push('/')
         }
     } catch (err) {
         console.error(err);

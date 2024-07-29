@@ -2,7 +2,7 @@
     <div class="flex justify-center mt-5">
         <form class="w-auto max-w-4xl p-8 bg-white border-4 border-[#3E4095] rounded-md shadow-md"
             @submit="sub($event)">
-            <h2 class="mb-12 text-4xl font-bold text-center text-[#3E4095]">Registrar Orden</h2>
+            <h2 class="mb-12 text-4xl font-bold text-center text-[#3E4095]">Editar Orden</h2>
             <div class="grid grid-cols-2 gap-10 mt-5">
                 <div class="col-span-1">
                     <Input v-model="form.persona_solicitante.value" label="Nombre del solicitante"
@@ -101,7 +101,7 @@
                 </button>
                 <button @click="submit"
                     class="border border-[#3E4095] rounded-2xl py-1 px-6 bg-white hover:bg-[#3E4095] hover:text-white">
-                    Crear
+                    Editar
                 </button>
             </div>
 
@@ -199,10 +199,11 @@ import Input from '../../components/Forms/Input.vue'
 import { clientes as clis } from '../../services/clientes.js'
 import { tecnicos as tecs } from '../../services/usuarios.js'
 import { productos as prods } from '../../services/productos.js'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { parseAndFormatDate } from '../../global/Parser.js'
 
 const route = useRoute();
+const router = useRouter();
 const showModal = ref(false);
 const selectCliente = ref(null)
 const clientes = ref([]);
@@ -308,7 +309,7 @@ const form = ref({
 })
 
 const back = () => {
-    location.href = '/ordenes';
+    router.push('/ordenes');
 }
 
 const error = ref('');
@@ -346,7 +347,7 @@ const submit = async (e) => {
         const res = await editar(route.params.id,data);
         if (res.status < 300) {
             setTimeout(() => {
-                location.href = '/ordenes';
+                router.push('/ordenes');
             }, 3000);
         }
     } catch (err) {

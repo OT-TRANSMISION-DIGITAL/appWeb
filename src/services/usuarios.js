@@ -8,6 +8,16 @@ export const usuarios = async () => {
         return Promise.reject(error);
     }
 }
+
+export const usuario = async (id) => {
+    try {
+        const response = await axios.get(`usuarios/${id}`);
+        return response;
+    } catch (error) {
+        return Promise.reject(error);
+    }
+}
+
 export const tecnicos = async () => {
     try {
         const response = await axios.get('tecnicos');
@@ -29,6 +39,15 @@ export const deleteUsuario = async (id) => {
 export const crearUsuario = async (usuario) => {
     try {
         const response = await axios.post('registrar', usuario);
+        return response;
+    } catch (error) {
+        return Promise.reject(error);
+    }
+}
+
+export const editarUsuario = async (id, usuario) => {
+    try {
+        const response = await axios.put(`usuarios/${id}`, usuario);
         return response;
     } catch (error) {
         return Promise.reject(error);

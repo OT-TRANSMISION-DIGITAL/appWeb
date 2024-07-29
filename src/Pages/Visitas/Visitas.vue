@@ -1,7 +1,7 @@
 <script setup>
 import { onMounted, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
-import { visitas, del }  from '../../services/visitas.js'
+import { visitas, del, autorizar, cancel }  from '../../services/visitas.js'
 import Table from '../../components/Tables/Table.vue'
 const router = useRouter();
 const headers = ['Motivo','Dirección','Cliente', 'Técnico', 'Sucursal', 'Fecha', 'Estado'];
@@ -10,6 +10,28 @@ const data = ref([])
 const edit = (id) => {
     console.log('Editando', id);
     router.push(`/visitas/${id}`);
+}
+const cancelar = async (id) => {
+    try {
+        const res = await cancel(id);
+        if(res.status < 300){
+            console.log('Cancelado', id);
+            location.reload();
+        }
+    } catch (error) {
+        console.log(error);
+    }
+}
+const auto = async (id) => {
+    try {
+        const res = await autorizar(id);
+        if(res.status < 300){
+            console.log('Autorizado', id);
+            location.reload();
+        }
+    } catch (error) {
+        console.log(error);
+    }
 }
 const deleted = async (id) => {
     try {
@@ -37,6 +59,12 @@ onMounted(async () => {
             item.cliente_id = item.cliente.nombre;
             item.tecnico_id = item.tecnico.nombre;
             item.sucursal_id = item.sucursal.nombre;
+            if(item.estatus == 'Sin Autorizar'){
+                item['cancel'] = cancelar
+                item['success'] = auto
+            }else if(item.estatus == 'Autorizada'){
+                item['cancel'] = cancelar
+            }
             return item;
         });
     } catch (error) {

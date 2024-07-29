@@ -1,5 +1,5 @@
 // Configurar Router de Vue
-import { createWebHistory, createRouter, useRouter } from "vue-router";
+import { createWebHistory, createRouter, useRouter, createWebHashHistory } from "vue-router";
 import { verifyToken } from "./guards/ValidateSession.js";
 
 const routes = [
@@ -11,64 +11,172 @@ const routes = [
             {
                 path: "/",
                 name: "Dashboard",
-                component: () => import("./components/Title.vue"),
+                components:{
+                    default: () => import("./components/Title.vue"),
+                    title: () => import("./components/Title.vue"),
+                },
+                props: {
+                    title: {
+                        title: "Dashboard",
+                    },
+                    default: {
+                        title: "Hola, Bienvenido",
+                        clasStyle: "!text-black",
+                    }
+                },
             },
             {
                 path: "/usuarios",
-                component: () => import("./Pages/Usuarios/Usuarios.vue"),
+                components:{
+                    default: () => import("./Pages/Usuarios/Usuarios.vue"),
+                    title: () => import("./components/Title.vue"),
+                } ,
+                props:{
+                    title:{
+                        title: "Usuarios"
+                    }
+                }
             },
             {
                 path: "/usuarios/crear",
                 name: "CrearUsuario",
-                component: () => import("./Pages/Usuarios/Crear.vue"),
+                components: {
+                    default: () => import("./Pages/Usuarios/Crear.vue"),
+                    title: () => import("./components/Title.vue"),
+                } ,
+                props:{
+                    title:{
+                        title: "Crear Usuario"
+                    }
+                }
             },
             {
                 path: "/clientes",
-                component: () => import("./Pages/Clientes/Clientes.vue"),
+                components: {
+                    default: () => import("./Pages/Clientes/Clientes.vue"),
+                    title: () => import("./components/Title.vue"),
+                } ,
+                props:{
+                    title:{
+                        title: "Clientes"
+                    }
+                }
             },
             {
                 path: "/clientes/:id",
-                component: () => import("./Pages/Clientes/Edit.vue"),
+                components: {
+                    default: () => import("./Pages/Clientes/Edit.vue"),
+                    title: () => import("./components/Title.vue"),
+                } ,
+                props:{
+                    title:{
+                        title: "Editar Cliente"
+                    }
+                }
             },
             {
                 path: "/clientes/crear",
                 name: "CrearClientes",
-                component: () => import("./Pages/Clientes/Crear.vue"),
+                components: {
+                    default: () => import("./Pages/Clientes/Crear.vue"),
+                    title: () => import("./components/Title.vue"),
+                } ,
+                props:{
+                    title:{
+                        title: "Crear Cliente"
+                    }
+                }
             },
             {
                 path: "/visitas",
                 name: "Visitas",
-                component: () => import("./Pages/Visitas/Visitas.vue"),
+                components: {
+                    default: () => import("./Pages/Visitas/Visitas.vue"),
+                    title: () => import("./components/Title.vue"),
+                } ,
+                props:{
+                    title:{
+                        title: "Visitas"
+                    }
+                }
             },
             {
                 path: "/visitas/crear",
                 name: "CrearVisitas",
-                component: () => import("./Pages/Visitas/Crear.vue"),
+                components: {
+                    default: () => import("./Pages/Visitas/Crear.vue"),
+                    title: () => import("./components/Title.vue"),
+                } ,
+                props:{
+                    title:{
+                        title: "Crear Visita"
+                    }
+                }
             },
             {
                 path: "/visitas/:id",
                 name: "EditarVisitas",
-                component: () => import("./Pages/Visitas/Edit.vue"),
+                components: {
+                    default: () => import("./Pages/Visitas/Edit.vue"),
+                    title: () => import("./components/Title.vue"),
+                } ,
+                props:{
+                    title:{
+                        title: "Editar Visita"
+                    }
+                }
             },
             {
                 path: "/ordenes",
                 name: "Ordenes",
-                component: () => import("./Pages/Ordenes/Ordenes.vue"),
+                components: {
+                    default: () => import("./Pages/Ordenes/Ordenes.vue"),
+                    title: () => import("./components/Title.vue"),
+                } ,
+                props:{
+                    title:{
+                        title: "Ordenes"
+                    }
+                }
             },
             {
                 path: "/ordenes/:id",
                 name: "OrdenesEdit",
-                component: () => import("./Pages/Ordenes/Edit.vue"),
+                components: {
+                    default: () => import("./Pages/Ordenes/Edit.vue"),
+                    title: () => import("./components/Title.vue"),
+                } ,
+                props:{
+                    title:{
+                        title: "Crear Orden"
+                    }
+                }
             },
             {
                 path: "/ordenes/crear",
                 name: "CrearOrdenes",
-                component: () => import("./Pages/Ordenes/Crear.vue"),
+                components: {
+                    default: () => import("./Pages/Ordenes/Crear.vue"),
+                    title: () => import("./components/Title.vue"),
+                } ,
+                props:{
+                    title:{
+                        title: "Editar Orden"
+                    }
+                }
             },
             {
                 path: "/agenda",
                 name: "Agenda",
-                component: () => import("./Pages/Agenda/Agenda.vue"),
+                components: {
+                    default: () => import("./Pages/Agenda/Agenda.vue"),
+                    title: () => import("./components/Title.vue"),
+                } ,
+                props:{
+                    title:{
+                        title: "Agenda"
+                    }
+                }
             },
         ],
         beforeEnter: verifyToken,
@@ -91,6 +199,7 @@ const routes = [
 
 const router = createRouter({
     history: createWebHistory(),
+    // history: createWebHashHistory(),
     routes,
 });
 export default router;

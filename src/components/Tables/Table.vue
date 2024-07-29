@@ -39,6 +39,12 @@
               <button class="text-blue-500" v-if="item?.edit" @click="item?.edit(item.id)">
                 <IconEdit />
               </button>
+              <button class="text-green-500" v-if="item?.success" @click="item?.success(item.id)">
+                <Succes />  
+              </button>
+              <button class="text-red-500" v-if="item?.cancel" @click="item?.cancel(item.id)">
+                <Cancelar />
+              </button>
             </td>
           </tr>
         </tbody>
@@ -52,6 +58,8 @@ import { ref, computed, defineProps, watch } from 'vue';
 import IconDelete from '../../assets/svgs/delete.vue';
 import IconEdit from '../../assets/svgs/edit.vue';
 import Pagination from './Pagination.vue';
+import Cancelar from '../../assets/svgs/cancel.vue';
+import Succes from '../../assets/svgs/succes.vue';
 
 const props = defineProps({
   headers: {
