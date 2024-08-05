@@ -115,6 +115,7 @@ onMounted(()=>{
 })
 
 const logOut = async () => {
+  return router.push('perfil')
   let res = null
   try {
     res = await axios.get('/logout')

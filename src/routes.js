@@ -178,6 +178,19 @@ const routes = [
                     }
                 }
             },
+            {
+                path: "/perfil",
+                name: "Perfil",
+                components: {
+                    default: () => import("./Pages/User/Perfil.vue"),
+                    title: () => import("./components/Title.vue"),
+                } ,
+                props:{
+                    title:{
+                        title: "Perfil"
+                    }
+                }
+            },
         ],
         beforeEnter: verifyToken,
     },
