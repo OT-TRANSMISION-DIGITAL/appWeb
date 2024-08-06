@@ -4,10 +4,14 @@ import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 
 // https://vitejs.dev/config/
+// Init port 5100
 export default defineConfig({
   plugins: [
     vue(),
   ],
+  server:{
+    port: 5555,
+  },
   base: "./",
   build: {
     outDir: 'dist',
