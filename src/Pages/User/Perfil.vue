@@ -10,7 +10,7 @@
                             d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
                     </svg>
                 </div>
-                <div class="absolute bottom-2 left-12 cursor-pointer" @click="isOpen = true">
+                <div class="absolute bottom-2 left-12 cursor-pointer" @click="isOpen = true;error= '';">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="size-4">
                         <path
                             d="M13.488 2.513a1.75 1.75 0 0 0-2.475 0L6.75 6.774a2.75 2.75 0 0 0-.596.892l-.848 2.047a.75.75 0 0 0 .98.98l2.047-.848a2.75 2.75 0 0 0 .892-.596l4.261-4.262a1.75 1.75 0 0 0 0-2.474Z" />
@@ -72,6 +72,11 @@
                         <h1 class="text-xl">Actualizar Imagen</h1>
                     </div>
                     <InputFile v-model="imagen" />
+                    <div>
+                        <span>
+                            <p class="text-red-500">{{ error }}</p>
+                        </span>
+                    </div>
                 </div>
                 <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
                     <button @click="sendImagen" type="button"
@@ -108,7 +113,31 @@ const usuario = ref({
     rol_id: 1,
 });
 
+
+
+function validateFile(file) {
+    let valid = true
+    const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg'];
+    const maxSizeInBytes = 2048 * 1024;
+
+    
+
+    if (!allowedTypes.includes(file.type)) {
+        error.value = 'El archivo debe ser tipo JPEG, PNG, or JPG.';
+        valid = false;
+    }
+
+    if (file.size > maxSizeInBytes) {
+        error.value = 'El máximo tamaño del archivo es 2048 KB.';
+        valid = false;
+    }
+
+    return valid;
+}
+
 const sendImagen = async () => { 
+    if(!validateFile(imagen.value))
+        return;
     const formData = new FormData();
     formData.append('img', imagen.value);
     console.log(imagen.value);

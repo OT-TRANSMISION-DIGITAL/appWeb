@@ -1,16 +1,18 @@
 <template>
   <div class="flex flex-col w-72 h-dvh px-4 py-4 bg-neutral-50 border-r-4 text-black border-[#3E4095]">
     <div class="flex flex-col items-center mt-3">
-      <img
+      <!-- <img
+        v-if="url"
         class="w-24 h-24 rounded-full"
-        src="https://via.placeholder.com/150"
+        :src="{path_api+(url?.replaceAll(/\\/g, ''))}"
         alt="User Avatar"
-      />
+      /> -->
+      <img v-if="url" :src="path_api+(url.replaceAll(/\\/g, ''))" alt="Imagen Usuario" width="100" :on-error="errorImg"/>
       <h4 class="mt-2 mb-4 text-lg font-semibold text-black">{{ name }}</h4>
       <button 
         @click="logOut"
       class="border border-[#3E4095] rounded-2xl py-1 px-6 bg-white hover:bg-[#3E4095] hover:text-white">
-        Cerrar sesión
+        Perfil
       </button>
     </div>
     <hr class="border-[#3E4095] mt-5 border-2" />
@@ -103,15 +105,35 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import axios from '../services/axios.js'
+import {user as us} from '../services/usuarios.js'
 const name = ref('Sin nombre')
 const router = useRouter()
+const url = ref('')
+const path_api = import.meta.env.VITE_IMG_URL;
 
-onMounted(()=>{
+const errorImg = (e) => {
+  e.target.src = 'https://via.placeholder.com/150'
+}
+
+onMounted(async ()=>{
   const user = JSON.parse(localStorage.getItem('user'))
   name.value = user?.nombre || 'Sin nombre'
+  
+  try {
+        const userResponse = await us();
+        if (userResponse.status < 300) {
+            url.value = userResponse.data.img;
+            console.log(userResponse.data);
+            
+        } else {
+        }
+    } catch (error) {
+        console.log(error);
+    }
+  console.log(user)
 })
 
 const logOut = async () => {
