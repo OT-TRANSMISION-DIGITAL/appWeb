@@ -1,7 +1,7 @@
 <template>
-    <div class="max-w-5xl mx-auto bg-white shadow-lg rounded-lg overflow-hidden">
+    <div class="max-w-xl mx-auto bg-white shadow-lg rounded-lg overflow-hidden">
         <div class="p-6">
-            <div class="flex items-center space-x-7 relative">
+            <div class="flex items-center space-x-7 relative z-0">
                 <div class="rounded-full border p-2 overflow-hidden max-w-24 max-h-24 min-w-24 min-h-24 flex justify-center items-center">
                     <img v-if="usuario.img" :src="path_api+(usuario.img.replaceAll(/\\/g, ''))" alt="Imagen Usuario" width="100">
                     <svg v-if="!usuario.img" class="w-12 h-12 text-gray-500" fill="currentColor" viewBox="0 0 24 24">
@@ -24,6 +24,18 @@
                         <h2 class="text-xl font-bold">{{ usuario.nombre }}</h2>
                         <p class="text-gray-600">{{ usuario.correo }}</p>
                     </div>
+                </div>
+                <div class="absolute right-2 top-2 cursor-pointer tooltip z-[999]" @click="logOut">
+                    <span class="tooltiptext">salir</span>
+                    <svg width="33" height="33" viewBox="0 0 33 33" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                    <rect width="33" height="33" fill="url(#pattern0_2689_66)"/>
+                    <defs>
+                    <pattern id="pattern0_2689_66" patternContentUnits="objectBoundingBox" width="1" height="1">
+                    <use xlink:href="#image0_2689_66" transform="scale(0.01)"/>
+                    </pattern>
+                    <image id="image0_2689_66" width="100" height="100" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGQAAABkCAYAAABw4pVUAAAAAXNSR0IArs4c6QAABDtJREFUeAHtnTur1FAQx/8WFhY2auNH8PkNrKzE2g8hYmOtYqO1XLDxUdkJfhAVfIBY+gD9AAqCiq876OHuhjnJmWUmZ2cyC0s2k8mc+f/+yU2yu3cD5CMJJIEkkASSQBJIAkkgCSSBJJAEkkAS8E/gNID7AN4D+AHgj9Mn9U4aSMspj7bs2236BoBfTg0Y23BI03UApNHNg8wYExVh2TUvbtAuHXHPGG5EPwGc9GDKgwXsHcWcex4MoYNfaTj69K0HQzyfTUk3oO8eDJGK8p6/9Z54ByztPw3ZsmNUGpKGyLYB6S7vPV9Gp0O2d8DS/jsglg0pFeQ9X0anQ7Z3wNL+OyCWDSkV5D1fRqdDtnfA0v47IJYNKRXkPV9Gp0O2d8DS/jsglg0pFeQ9X0anQ7Z3wNL+OyCWDSkV5D1fRqdDtnfA0v47IJYNKRXkPV9C5xiA2wAeArgEYL9k5U1zvQOW9t/K6QyAr4N3qp8AONxaYNM8qSDv+a2cng7MKLpfWJtSBlrKtMUQ+lIdfW2oxuS5pSm1QaPGWwyhnA8jhhAbM1Oigq/pajXk4oQhZqbUGo8abzWE8m42mPISwBFJ0ancqOBruqZ4DJe3mqJ29lVrPGp8CLxlvsUUtbOvqOBruloM4HJmM6XWeNQ4B7s1NospUcHXdLXCr+WZm1JrPGq8BloSNzWlN/jXu/8H+BjAo5meFwBoPOnCcIod5RySOE25U0Wtln8GcE7arEK+lZ5aXTLloKTvWiHrOF0J93hY6+Lq70iEcgXmiB2VNKmYO4e24RifJP0PV55rfkmGfPRgCH0C1+Mx1wa3Oo6LP1lfAJzv4MgqqDleuzmoFxhv8rR3fbMsYJYyXVe/2dythsuFjd9sXIoRRedmFuytZWoGDVMaXcp0D638lbkZaUi7KbOYkYa0GTKbGWnItCGzmpGGjBsyuxlpSN2Qyw0nPHTRp/blhtLKUs6uis6ie2pKbwiWdbipiRnUFDdY5NiUEbScvuX+e4SNmRlpSN2eVxVDNr4Crw+1viTy3sBpW1dfnzsL4NvAlGcWx4xhC1zTkWND/WPz9AOhd/5/1n8FwIGxZK1lkeFz2rS4mdXhmo4cMwOpVTgyfE6bFjezOlzTkWNmILUKR4bPadPiZlaHazpyzAykVuHI8DltWtzM6nBNR46ZgdQqHBk+p02Lm1kdrunIMTOQWoUjw+e0aXEzq8M1HTlmBlKrcGT4nDYtbmZ1uKYjx8xAahWODJ/TpsXNrA7XdOSYGUitwnnLIy2SSnXeDT6mjLx3uLgpGN2eNLIJq9ruKm3EpmXoc+OxX09bFeT5NWk8YUpSsTjdK9Yz7JberyryMi9FvzFI94qNuKeQJjLD1c2Ji+N0r1i6PSkd/OgmjC1b3jbmUO+kgY4Zx4u4nCaBJJAEkkASSAJJIAkkgSSQBJJAEkgCSeAfgb/g6mbEaID1dQAAAABJRU5ErkJggg=="/>
+                    </defs>
+                    </svg>
                 </div>
             </div>
             <div class="mt-10 mb-4">
@@ -97,9 +109,12 @@
 import { ref, onMounted } from 'vue';
 import { user, updateImagen } from '../../services/usuarios.js';
 import InputFile from '../../components/Forms/InputImage.vue';
-
+ import {useRouter} from 'vue-router'
+ import {useGlobalState} from '../../store/User.js'
+import axios from 'axios'
+const router = useRouter()
 const path_api = import.meta.env.VITE_IMG_URL;
-
+const {establecerUsuario, state} = useGlobalState()
 const imagen = ref(null)
 const isOpen = ref(false)
 const error = ref(null)
@@ -140,13 +155,11 @@ const sendImagen = async () => {
         return;
     const formData = new FormData();
     formData.append('img', imagen.value);
-    console.log(imagen.value);
-    console.log(formData);
-    console.log(usuario.value);
     try {
         const resUpdateImagen = await updateImagen(usuario.value.id, formData);
         if (resUpdateImagen.status < 300) {
-            usuario.value.img = resUpdateImagen.data.img;
+            establecerUsuario(resUpdateImagen.data)
+            usuario.value = state.usuario
             isOpen.value = false;
             imagen.value = null;
             initComponent();
@@ -164,13 +177,36 @@ const initComponent = async () => {
     try {
         const userResponse = await user();
         if (userResponse.status < 300) {
-            usuario.value = userResponse.data;
+            establecerUsuario(userResponse.data)
+            usuario.value = state.usuario
         } else {
         }
     } catch (error) {
         console.log(error);
     }
 }
+
+async function logOut(){
+    let res = null
+    try {
+        res = await axios.get('/logout')
+        if (res.status < 300) {
+        localStorage.removeItem('token')
+        localStorage.removeItem('user')
+        router.push('login')
+        }else{
+        console.log(res)
+        localStorage.removeItem('token')
+        localStorage.removeItem('user')
+        router.push('login')
+        }
+    } catch (error) {
+        console.log(error)
+        localStorage.removeItem('token')
+        localStorage.removeItem('user')
+        router.push('login')
+    }
+    }
 onMounted(async () => {
     initComponent();
 })

@@ -5,7 +5,7 @@
     @dragover.prevent="handleDragOver"
     @dragleave="handleDragLeave"
     @drop.prevent="handleFileDrop"
-    :class="['relative max-w-sm p-6 mb-4 bg-gray-100 border-dashed border-2 rounded-lg items-center mx-auto text-center cursor-pointer', isDragging ? 'border-blue-500' : 'border-gray-400']"
+    :class="['relative w-[20rem] max-w-sm p-6 mb-4 bg-gray-100 border-dashed border-2 rounded-lg items-center mx-auto text-center cursor-pointer', isDragging ? 'border-blue-500' : 'border-gray-400']"
   >
     <input ref="uploadInput" @change="handleFileChange" type="file" class="hidden" accept="image/*" />
     <label for="uploadInput" class="cursor-pointer">
@@ -24,7 +24,7 @@
     </div>
   </div>
   <div class="flex items-center justify-center" v-show="showSVG">
-    <div class="w-full">
+    <div class="w-[80%]">
       <label @click="triggerFileUpload" class="w-full text-white bg-[#050708] hover:bg-[#050708]/90 focus:ring-4 focus:outline-none focus:ring-[#050708]/50 font-medium rounded-lg text-sm px-5 py-2.5 flex items-center justify-center mr-2 mb-2 cursor-pointer">
         <span class="text-center ml-2">Cambiar</span>
       </label>

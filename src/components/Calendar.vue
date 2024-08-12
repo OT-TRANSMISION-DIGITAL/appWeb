@@ -47,7 +47,8 @@
                   <div v-if="events.length > 0" class="bottom flex-grow h-30 py-1 w-full cursor-pointer">
                     <template v-for="(event, eIndex) in events">
                           <div class="event bg-purple-400 text-white rounded p-1 text-sm mb-1" :key="eIndex"
-                            v-if="validEvetDay(event.date, currentYear, currentMonth, day.date)"> 
+                            v-if="validEvetDay(event.date, currentYear, currentMonth, day.date)"
+                            @click="actionCard(event)"> 
                         <span class="event-name">{{ event.title }}</span><br>
                         <span class="time">{{ event.time }}</span>
                       </div>
@@ -69,8 +70,8 @@ export default {
     return {
       currentYear: new Date().getFullYear(),
       currentMonth: new Date().getMonth(), // July (0-based index)
-      daysOfWeek: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
-      months: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+      daysOfWeek: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],
+      months: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
       years: [],
       calendar: [],
     };
@@ -79,7 +80,12 @@ export default {
     events: {
       type: Array,
       required: true,
-      default: () => []
+      default: () => [],
+    },
+    actionCard:{
+      type: Function,
+      required: true,
+      default: () => {},
     }
   },
   methods: {

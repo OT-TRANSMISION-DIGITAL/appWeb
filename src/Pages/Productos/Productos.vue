@@ -1,18 +1,19 @@
 <script setup>
 import { onMounted, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
-import { usuarios, deleteUsuario }  from '../../services/usuarios.js'
+import { productos, deleteProducto }  from '../../services/productos'
 import Table from '../../components/Tables/Table.vue'
 const router = useRouter();
-const headers = ['Nombre','Correo','Teléfono','Rol'];
-const columns = ['nombre','correo','telefono','rol_id'];
+const headers = ['Imagen','Nombre','Descripcion','Precio'];
+const columns = ['img','nombre','descripcion','precio'];
 const data = ref([])
 const edit = (id) => {
-    router.push('/usuarios/'+id);
+    console.log('Editando', id);
+    router.push(`/productos/${id}`);
 }
 const deleted = async (id) => {
     try {
-        const res = await deleteUsuario(id);
+        const res = await deleteProducto(id);
         if(res.status < 300){
             console.log('Eliminado', id);
             location.reload();
@@ -22,20 +23,24 @@ const deleted = async (id) => {
     }
 }
 const addUser = () => {
-    router.push('/usuarios/crear');
+    router.push('/productos/crear');
 }
 
+const path_api = import.meta.env.VITE_IMG_URL;
 onMounted(async () => {
     try {
-        const res = await usuarios();
-        const  d = res.data.data;
-        d.map((item) => {
+        const res = await productos();
+        const d = res.data.data;
+        data.value = d.map((item) => {
             item['edit'] = edit
             item['delete'] = deleted
-            item.rol_id = item.rol.nombre;
+            item.precio = `$ ${parseFloat(item?.precio || 0).toFixed(2)}`
+            item.img = item.img ? `<img src="${path_api+(item.img.replaceAll(/\\/g, ''))}" alt="Imagen Usuario" width="40" class="">`
+            :
+            `<p></p>`
             return item;
         });
-        data.value = d;
+        console.log(d)
     } catch (error) {
         console.log(error);
     }
@@ -56,7 +61,7 @@ onMounted(async () => {
             :columns="columns"
             :headers="headers"
             :data="data"
-            btn-text="Agregar Usuario"
+            btn-text="Agregar Producto"
             :btn-action="addUser"
         />
     </div>
