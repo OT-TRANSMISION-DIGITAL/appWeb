@@ -76,7 +76,7 @@ const router = useRouter();
 const route = useRoute();
 const imgRef =ref(null)
 const loading = ref(false);
-const imageSRC = ref(null)
+const imageSRC = ref('')
 const beforeImagen = ref(null)
 const form = ref({
     nombre: {
@@ -164,9 +164,27 @@ const validar = () => {
         form.value.nombre.error.message = 'El nombre es requerido';
         valid = false;
     }
+    // Validar nombre solo debe tener letras y mayor a 10
+    if(!/^[a-zA-Z\s]*$/.test(form.value.nombre.value)){
+        form.value.nombre.error.status = 'error';
+        form.value.nombre.error.message = 'Solo debe contener letras';
+        valid = false;
+    }
     if(form.value.descripcion.value === ''){
         form.value.descripcion.error.status = 'error';
         form.value.descripcion.error.message = 'La descripcion es requerido';
+        valid = false;
+    }
+    // Validar nombre solo debe tener letras y mayor a 10
+    if(!/^[a-zA-Z\s]*$/.test(form.value.nombre.value)){
+        form.value.descripcion.error.status = 'error';
+        form.value.descripcion.error.message = 'Solo debe contener letras';
+        valid = false;
+    }
+    // validar descripcion mayor a 10
+    if(form.value.descripcion.value.length < 10){
+        form.value.descripcion.error.status = 'error';
+        form.value.descripcion.error.message = 'Debe tener al menos 10 caracteres';
         valid = false;
     }
     if(form.value.precio.value === ''){
@@ -185,9 +203,9 @@ onMounted(async()=>{
             form.value.descripcion.value = res.data.descripcion
             form.value.nombre.value = res.data.nombre
             form.value.precio.value = res.data.precio
-            imageSRC.value = res.data.img ? path_api + res.data.img : null
+            imageSRC.value = res.data.img ? path_api + res.data.img : ''
         }else{
-            console.log(res)
+            //console.log(res)
         }
     } catch (error) {
         console.error(error)
@@ -225,7 +243,7 @@ const sendImagen = async (id) => {
             error.value = resUpdateImagen?.data?.message || 'Error al guardar la imagen';
         }
     } catch (err) {
-        console.log(err);
+        console.error(err);
         error.value = err?.response?.data?.message || err?.data?.message || err?.message || 'Error al guardar la imagen';
     }
 }

@@ -11,54 +11,54 @@ const data = ref([]);
 const ordenData = ref(null)
 const isOpenModal = ref(false)
 const edit = (id) => {
-    console.log('Editando', id);
+    //console.log('Editando', id);
     router.push(`/ordenes/${id}`);
 }
 const cancelar = async (id) => {
     try {
         const res = await cancel(id);
         if(res.status < 300){
-            console.log('Cancelado', id);
+            //console.log('Cancelado', id);
             location.reload();
         }
     } catch (error) {
-        console.log(error);
+        console.error(error);
     }
 }
 const auto = async (id) => {
     try {
         const res = await autorizar(id);
         if(res.status < 300){
-            console.log('Autorizado', id);
+            //console.log('Autorizado', id);
             location.reload();
         }
     } catch (error) {
-        console.log(error);
+        console.error(error);
     }
 }
 const deleted = async (id) => {
     try {
         const res = await del(id);
         if(res.status < 300){
-            console.log('Eliminado', id);
+            //console.log('Eliminado', id);
             location.reload();
         }
     } catch (error) {
-        console.log(error);
+        console.error(error);
     }
 }
 const document = async (id) => {
     try {
         const res = await pdf(id);
         if(res.status < 300){
-            console.log(res);
+            //console.log(res);
             const file = new Blob([res.data], { type: 'application/pdf' });
             const fileURL = URL.createObjectURL(file);
             window.open(fileURL, '_blank');
 
         }
     } catch (error) {
-        console.log(error);
+        console.error(error);
     }
 }
 const show = async (id) => {
@@ -68,7 +68,7 @@ const show = async (id) => {
             ordenData.value = res.data
             isOpenModal.value = true
         }else{
-            console.log(res)
+            //console.log(res)
         }
     } catch (error) {
         console.error(error)
@@ -82,7 +82,7 @@ onMounted(async () => {
     try {
         const res = await ordenes();
         const d = res.data.data;
-        console.log(d)
+        //console.log(d)
         data.value = d.map((item) => {
             item['edit'] = edit
             // item['delete'] = deleted
@@ -95,17 +95,45 @@ onMounted(async () => {
                 item['cancel'] = cancelar
             }else if(item.estatus == 'Autorizada'){
                 item['cancel'] = cancelar
-                item['document'] = document
-            }else if(item.estatus == 'Autorizada'){
+            }else if(item.estatus == 'Finalizada'){
                 item['document'] = document
             }
             return item;
         });
+        paginateData();
     } catch (error) {
-        console.log(error);
+        console.error(error);
     }
 });
 
+async function  paginateData() {
+    // Siclo para paginar la api mientrar traega resultados
+    let page = 2;
+    let res = await ordenes(page);
+    let d = res.data.data;
+    while(d.length > 0){
+        data.value = data.value.concat(d.map((item) => {
+            item['edit'] = edit
+            // item['delete'] = deleted
+            item.cliente_id = item.cliente.nombre;
+            item.tecnico_id = item.tecnico.nombre;
+            item.sucursal_id = item.sucursal.nombre;
+            item['show'] = show
+            if(item.estatus == 'Sin Autorizar'){
+                item['success'] = auto
+                item['cancel'] = cancelar
+            }else if(item.estatus == 'Autorizada'){
+                item['cancel'] = cancelar
+            }else if(item.estatus == 'Finalizada'){
+                item['document'] = document
+            }
+            return item;
+        }));
+        page++;
+        res = await ordenes(page);
+        d = res.data.data;
+    }
+}
 
 function convertirFecha(fechaOriginal){
     // Crear un objeto Date a partir de la cadena original

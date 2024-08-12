@@ -168,7 +168,7 @@ const sendImagen = async () => {
             error.value = resUpdateImagen?.data?.message || 'Error al actualizar la imagen';
         }
     } catch (err) {
-        console.log(err);
+        console.error(err);
         error.value = err?.response?.data?.message || err?.data?.message || err?.message || 'Error al actualizar la imagen';
     }
     // isOpen = false; 
@@ -183,7 +183,7 @@ const initComponent = async () => {
         } else {
         }
     } catch (error) {
-        console.log(error);
+        console.error(error);
     }
 }
 
@@ -196,13 +196,13 @@ async function logOut(){
         localStorage.removeItem('user')
         router.push('login')
         }else{
-        console.log(res)
+        //console.log(res)
         localStorage.removeItem('token')
         localStorage.removeItem('user')
         router.push('login')
         }
     } catch (error) {
-        console.log(error)
+        console.error(error)
         localStorage.removeItem('token')
         localStorage.removeItem('user')
         router.push('login')

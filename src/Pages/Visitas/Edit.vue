@@ -218,7 +218,7 @@ const submit = async (e) => {
             }, 3000);
         }
     } catch (error) {
-        console.log(error);
+        console.error(error);
     }
 }
 
@@ -232,6 +232,12 @@ const validar = ()=>{
     }else{
         form.value.motivo.error.status = 'success';
         form.value.motivo.error.message = '';
+    }
+    // Motivo solo debe tener letras
+    if(form.value.motivo.value != '' && !/^[a-zA-Z\s]*$/.test(form.value.motivo.value)){
+        form.value.motivo.error.status = 'error';
+        form.value.motivo.error.message = 'El campo solo debe tener letras';
+        valid = false;
     }
     if(form.value.fechaHoraSolicitud.value == ''){
         form.value.fechaHoraSolicitud.error.status = 'error';
@@ -248,6 +254,12 @@ const validar = ()=>{
     }else{
         form.value.direccion.error.status = 'success';
         form.value.direccion.error.message = '';
+    }
+    // Dirección mayor a 10
+    if(form.value.direccion.value != '' && form.value.direccion.value.length < 10){
+        form.value.direccion.error.status = 'error';
+        form.value.direccion.error.message = 'El campo debe tener al menos 10 caracteres';
+        valid = false;
     }
     if(form.value.cliente_id.value == ''){
         form.value.cliente_id.error.status = 'error';
@@ -289,15 +301,15 @@ onMounted(async ()=>{
         const resClientes = await clis();
         if(resClientes.status < 300){
             clientes.value = resClientes.data.data;
-            console.log(clientes.value);
+            //console.log(clientes.value);
         }
         const resTecnicos = await tecs();
         if(resTecnicos.status < 300){
             tecnicos.value = resTecnicos.data;
-            console.log(tecnicos.value);
+            //console.log(tecnicos.value);
         }
         const resVisita = await visita(route.params.id);
-        console.log(resVisita);
+        //console.log(resVisita);
         if(resVisita.status < 300){
             form.value.motivo.value = resVisita.data.motivo;
             form.value.fechaHoraSolicitud.value = resVisita.data.fechaHoraSolicitud;
@@ -310,7 +322,7 @@ onMounted(async ()=>{
             changeCliente(resVisita.data.cliente_id);
         }
     } catch (error) {
-        console.log(error);
+        console.error(error);
     }
 
 })

@@ -158,6 +158,29 @@ const validar = () => {
         form.value.direccion.error.message = 'El correo es requerido';
         valid = false;
     }
+    if(form.value.nombre.value === ''){
+        form.value.nombre.error.status = 'error';
+        form.value.nombre.error.message = 'El nombre es requerido';
+        valid = false;
+    }
+    // Validar nombre solo debe tener letras y mayor a 10
+    if(!/^[a-zA-Z\s]*$/.test(form.value.nombre.value)){
+        form.value.nombre.error.status = 'error';
+        form.value.nombre.error.message = 'Solo debe contener letras';
+        valid = false;
+    }
+    // Validar nombre solo debe tener letras y mayor a 10
+    if(!/^[a-zA-Z\s]*$/.test(form.value.nombre.value)){
+        form.value.direccion.error.status = 'error';
+        form.value.direccion.error.message = 'Solo debe contener letras';
+        valid = false;
+    }
+    // validar direccion mayor a 10
+    if(form.value.direccion.value.length < 10){
+        form.value.direccion.error.status = 'error';
+        form.value.direccion.error.message = 'Debe tener al menos 10 caracteres';
+        valid = false;
+    }
     if(form.value.telefono.value === ''){
         form.value.telefono.error.status = 'error';
         form.value.telefono.error.message = 'El teléfono es requerido';

@@ -336,7 +336,7 @@ const back = () => {
 
 const error = ref('');
 const submit = async (e) => {
-    console.log(form.value);
+    //console.log(form.value);
     if (!validar()) return;
     e.preventDefault();
     const options = {
@@ -373,7 +373,7 @@ const submit = async (e) => {
             }, 3000);
         }
     } catch (err) {
-        console.log(err);
+        console.error(err);
         error.value = err.response.data.message || err.response.data.msg || 'Error en el servidor al iniciar sesión';
     }
 }
@@ -388,6 +388,13 @@ const validar = () => {
     } else {
         form.value.persona_solicitante.error.status = 'success';
         form.value.persona_solicitante.error.message = '';
+    }
+
+    // Validar nombre solo debe tener letras
+    if(!/^[a-zA-Z\s]*$/.test(form.value.persona_solicitante.value)){
+        form.value.persona_solicitante.error.status = 'error';
+        form.value.persona_solicitante.error.message = 'Solo debe contener letras';
+        valid = false;
     }
     if (!form.value.fechaHoraSolicitud.value) {
         form.value.fechaHoraSolicitud.error.status = 'error';
@@ -404,6 +411,19 @@ const validar = () => {
     } else {
         form.value.direccion.error.status = 'success';
         form.value.direccion.error.message = '';
+    }
+
+    // Validar nombre solo debe tener letras y mayor a 10
+    if(!/^[a-zA-Z\s]*$/.test(form.value.direccion.value)){
+        form.value.direccion.error.status = 'error';
+        form.value.direccion.error.message = 'Solo debe contener letras';
+        valid = false;
+    }
+    // validar direccion mayor a 10
+    if(form.value.direccion.value.length < 10){
+        form.value.direccion.error.status = 'error';
+        form.value.direccion.error.message = 'Debe tener al menos 10 caracteres';
+        valid = false;
     }
     if (!form.value.cliente_id.value) {
         form.value.cliente_id.error.status = 'error';
@@ -529,20 +549,20 @@ onMounted(async () => {
         const resClientes = await clis();
         if (resClientes.status < 300) {
             clientes.value = resClientes.data.data;
-            console.log(clientes.value);
+            //console.log(clientes.value);
         }
         const resTecnicos = await tecs();
         if (resTecnicos.status < 300) {
             tecnicos.value = resTecnicos.data;
-            console.log(tecnicos.value);
+            //console.log(tecnicos.value);
         }
         const resProductos = await prods();
         if (resProductos.status < 300) {
             productos.value = resProductos.data.data;
-            console.log(productos.value);
+            //console.log(productos.value);
         }
     } catch (error) {
-        console.log(error);
+        console.error(error);
     }
 
 })

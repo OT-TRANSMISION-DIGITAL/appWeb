@@ -1,8 +1,8 @@
 import axios from './axios.js';
 
-export const sucursales = async () => {
+export const sucursales = async (page) => {
     try {
-        const response = await axios.get('sucursales');
+        const response = await axios.get('sucursales?page=' + (page || 1));
         return response;
     } catch (error) {
         return Promise.reject(error);

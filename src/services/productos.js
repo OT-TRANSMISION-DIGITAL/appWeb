@@ -1,8 +1,8 @@
 import axios from './axios.js';
 
-export const productos = async () => {
+export const productos = async (page) => {
     try {
-        const response = await axios.get('productos');
+        const response = await axios.get('productos?page=' + (page || 1));
         return response;
     } catch (error) {
         return Promise.reject(error);

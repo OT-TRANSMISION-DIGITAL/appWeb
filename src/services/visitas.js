@@ -1,8 +1,8 @@
 import axios from './axios.js';
 
-export const visitas = async () => {
+export const visitas = async (page) => {
     try {
-        const response = await axios.get('visitas');
+        const response = await axios.get('visitas?page=' + (page || 1));
         return response;
     } catch (error) {
         return Promise.reject(error);

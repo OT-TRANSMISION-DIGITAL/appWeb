@@ -135,7 +135,7 @@ const errorImg = (e) => {
 }
 
 onMounted(async () => {
-  console.log(state.usuario)
+  //console.log(state.usuario)
 })
 
 const logOut = async () => {
