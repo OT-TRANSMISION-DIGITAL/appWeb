@@ -33,24 +33,7 @@
                 :validation-message="form.phone.error.message"
                 @keyup="form.phone.value = formatPhoneNumber(form.phone.value)"
             />
-            <Input 
-                label="Contraseña"
-                placeholder="Contraseña"
-                type="password"
-                name="password"
-                v-model="form.password.value"
-                :validation-status="form.password.error.status"
-                :validation-message="form.password.error.message"
-                @keyup="form.password.error = !isPassword(form.password.value) 
-                ? {
-                    status: 'error',
-                    message: 'Tu contraseña debe tener al menos 8 caracteres, incluyendo al menos una letra minúscula, una letra mayúscula, un número y un carácter especial (!@#$%^&*_).'
-                }:{
-                    status: 'success',
-                    message: ''
-                }"
-            />
-            <div class="col-span-2">
+            <div class="">
                 <label for="countries" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Rol</label>
                 <select v-model="form.rol.value"
                 id="countries" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
@@ -81,12 +64,13 @@
   
 <script setup>
 import {ref, onMounted} from 'vue'
-import { useRouter } from 'vue-router'
-import { crearUsuario } from '../../services/usuarios.js'
+import { useRouter, useRoute } from 'vue-router'
+import { editarUsuario, user, usuario } from '../../services/usuarios.js'
 import {roles as GetRoles} from '../../services/roles.js'
 import Input from '../../components/Forms/Input.vue'
 import { formatPhoneNumber, isEmail, isPassword, isValidPhoneNumber } from '../../global/Validators.js'
 const router = useRouter();
+const route = useRoute()
 const form = ref({
     nombre: {
         value: '',
@@ -110,13 +94,6 @@ const form = ref({
         }
     
     },
-    password: {
-        value: '',
-        error: {
-            status: '',
-            message: ''
-        }
-    },
     rol: {
         value: '',
         error: {
@@ -137,11 +114,10 @@ const submit = async (e) => {
         nombre: form.value.nombre.value,
         correo: form.value.email.value,
         telefono: form.value.phone.value.replaceAll("-", ''),
-        password: form.value.password.value,
         rol_id: form.value.rol.value,
     }
     try {
-        const res = await crearUsuario(data);
+        const res = await editarUsuario(route.params.id,data);
         if(res.status < 300){
             router.push('/usuarios')
         }
@@ -177,16 +153,6 @@ const validar = ()=>{
         form.value.phone.error.message = 'El formato del teléfono no es válido (Ejemplo: 123-456-7890)';
         valid = false;
     }
-    if(form.value.password.value === ''){
-        form.value.password.error.status = 'error';
-        form.value.password.error.message = 'La contraseña es requerida';
-        valid = false;
-    }
-    if(!isPassword(form.value.password.value)){
-        form.value.password.error.status = 'error';
-        form.value.password.error.message = 'Tu contraseña debe tener al menos 8 caracteres, incluyendo al menos una letra minúscula, una letra mayúscula, un número y un carácter especial (!@#$%^&*_).';
-        valid = false;
-    }
     if(form.value.rol.value === ''){
         form.value.rol.error.status = 'error';
         form.value.rol.error.message = 'El rol es requerido';
@@ -201,6 +167,14 @@ onMounted(async ()=>{
         const res = await GetRoles();
         if(res.status < 300){
             roles.value = res.data.roles;
+        }
+        const resUsuario = await usuario(route.params.id)
+        if(res.status < 300){
+            console.log(resUsuario)
+            form.value.email.value = resUsuario.data.correo
+            form.value.nombre.value = resUsuario.data.nombre
+            form.value.phone.value = formatPhoneNumber(resUsuario.data.telefono)
+            form.value.rol.value = resUsuario.data.rol_id
         }
     } catch (error) {
         console.log(error);

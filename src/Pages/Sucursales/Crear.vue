@@ -1,9 +1,9 @@
 <template>
     <div class="flex justify-center mt-5">
-      <form class="w-auto max-w-4xl p-8 bg-white border-4 border-[#3E4095] rounded-md shadow-md"
+      <form class="w-[35rem] max-w-4xl p-8 bg-white border-4 border-[#3E4095] rounded-md shadow-md"
         @submit="sub($event)"
       >
-        <h2 class="mb-7 text-4xl font-bold text-center text-[#3E4095]">Actualizar Cliente</h2>
+        <h2 class="mb-5 text-4xl font-bold text-center text-[#3E4095]">Registrar Sucursal</h2>
         <div class="grid grid-cols-2 gap-10 mt-5">
             <div class="col-span-2">
                 <Input 
@@ -18,26 +18,36 @@
             </div>
             <div class="col-span-2">
                 <Input 
-                    v-model="form.email.value"
+                    v-model="form.direccion.value"
                     label="Correo"
                     placeholder="Correo"
                     type="email"
                     name="email"
-                    :validation-status="form.email.error.status"
-                    :validation-message="form.email.error.message"
+                    :validation-status="form.direccion.error.status"
+                    :validation-message="form.direccion.error.message"
                 />
             </div>
             <div class="col-span-2">
                 <Input 
-                    v-model="form.phone.value"
+                    v-model="form.telefono.value"
                     label="Teléfono"
                     placeholder="Teléfono"
                     type="text"
                     name="phone"
-                    :validation-status="form.phone.error.status"
-                    :validation-message="form.phone.error.message"
-                    @keyup="form.phone.value = formatPhoneNumber(form.phone.value)"
+                    :validation-status="form.telefono.error.status"
+                    :validation-message="form.telefono.error.message"
+                    @keyup="form.telefono.value = formatPhoneNumber(form.telefono.value)"
                 />
+            </div>
+            <div class="col-span-2">
+                <label for="countries" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Seleccione un Cliente</label>
+                <select v-model="form.cliente_id.value"
+                id="countries" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                    <option selected disabled>Elija una opción</option>
+                    <option v-for="cliente in clientes" :value="cliente.id">{{ cliente.nombre }}</option>
+                </select>
+                <!-- Mensaje de error -->
+                <span v-if="form.cliente_id.error.status == 'error'" class="text-red-500 text-sm">{{ form.cliente_id.error.message }}</span>
             </div>
         </div>
         <!-- Span Error general API -->
@@ -54,7 +64,7 @@
             </button>
             <button @click="submit"
             class="border border-[#3E4095] rounded-2xl py-1 px-6 bg-white hover:bg-[#3E4095] hover:text-white">
-                Actualizar
+                Crear
             </button>
         </div>
       </form>
@@ -63,12 +73,12 @@
   
 <script setup>
 import {onMounted, ref} from 'vue'
-import { useRoute, useRouter } from 'vue-router'
-import { cliente, editarCliente } from '../../services/clientes.js'
+import { useRouter } from 'vue-router'
+import { clientes as cli } from '../../services/clientes.js'
+import { crearSucursal } from '../../services/sucursales.js'
 import Input from '../../components/Forms/Input.vue'
 import Loading from '../../components/Forms/Loading.vue'
-import { formatPhoneNumber, isEmail, isValidPhoneNumber } from '../../global/Validators.js'
-const route = useRoute();
+import { formatPhoneNumber, isValidPhoneNumber } from '../../global/Validators.js'
 const router = useRouter();
 const loading = ref(false);
 const form = ref({
@@ -79,14 +89,21 @@ const form = ref({
             message: ''
         }
     },
-    email: {
+    direccion: {
         value: '',
         error: {
             status: '',
             message: ''
         }
     },
-    phone: {
+    telefono: {
+        value: '',
+        error: {
+            status: '',
+            message: ''
+        }
+    },
+    cliente_id: {
         value: '',
         error: {
             status: '',
@@ -97,7 +114,7 @@ const form = ref({
 const error = ref('');
 
 const back = () => {
-    router.push('/clientes');
+    router.push('/sucursales')
 }
 
 const submit = async (e) => {
@@ -106,13 +123,14 @@ const submit = async (e) => {
     loading.value = true;
     const data = {
         nombre: form.value.nombre.value,
-        correo: form.value.email.value,
-        telefono: form.value.phone.value.replaceAll(' ','').replaceAll('-','')
+        direccion: form.value.direccion.value,
+        telefono: form.value.telefono.value.replaceAll(' ','').replaceAll('-',''),
+        cliente_id: form.value.cliente_id.value
     }
     try {
-        const res = await editarCliente(route.params.id,data);
+        const res = await crearSucursal(data);
         if(res.status < 300){
-            router.push('/clientes');
+            router.push('/sucursales')
         }
     } catch (err) {
         console.error(err);
@@ -124,50 +142,45 @@ const submit = async (e) => {
 
 const validar = () => {
     let valid = true;
+    if(form.value.cliente_id.value === ''){
+        form.value.cliente_id.error.status = 'error';
+        form.value.cliente_id.error.message = 'El cliente es requerido';
+        valid = false;
+    }
     if(form.value.nombre.value === ''){
         form.value.nombre.error.status = 'error';
         form.value.nombre.error.message = 'El nombre es requerido';
         valid = false;
     }
-    if(form.value.email.value === ''){
-        form.value.email.error.status = 'error';
-        form.value.email.error.message = 'El correo es requerido';
+    if(form.value.direccion.value === ''){
+        form.value.direccion.error.status = 'error';
+        form.value.direccion.error.message = 'El correo es requerido';
         valid = false;
     }
-    if(!isEmail(form.value.email.value)){
-        form.value.email.error.status = 'error';
-        form.value.email.error.message = 'El formato del correo no es válido';
+    if(form.value.telefono.value === ''){
+        form.value.telefono.error.status = 'error';
+        form.value.telefono.error.message = 'El teléfono es requerido';
         valid = false;
     }
-    if(form.value.phone.value === ''){
-        form.value.phone.error.status = 'error';
-        form.value.phone.error.message = 'El teléfono es requerido';
-        valid = false;
-    }
-    if(!isValidPhoneNumber(form.value.phone.value)){
-        form.value.phone.error.status = 'error';
-        form.value.phone.error.message = 'El formato del teléfono no es válido (10 dígitos)';
+    if(!isValidPhoneNumber(form.value.telefono.value)){
+        form.value.telefono.error.status = 'error';
+        form.value.telefono.error.message = 'El formato del teléfono no es válido (10 dígitos)';
         valid = false;
     }
     return valid;
 }
-
+const clientes = ref([])
 const sub = (e) => {e.preventDefault();}
-
-onMounted(async () => {
+onMounted(async ()=>{
     try {
-        const clienteRes = await cliente(route.params.id);
-        if(clienteRes.status < 300){
-            const c = clienteRes.data;
-            form.value.nombre.value = c.nombre;
-            form.value.email.value = c.correo;
-            form.value.phone.value = formatPhoneNumber(c.telefono);
+        const res = await cli()
+        if(res.status < 300){
+            clientes.value = res.data.data
         }
-    } catch (e) {
-     console.e(e);   
+    } catch (error) {
+        
     }
 })
-
 </script>
 
 <style scoped>

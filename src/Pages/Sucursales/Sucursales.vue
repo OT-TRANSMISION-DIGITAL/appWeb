@@ -1,18 +1,19 @@
 <script setup>
 import { onMounted, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
-import { usuarios, deleteUsuario }  from '../../services/usuarios.js'
+import { sucursales, deleteSucursal }  from '../../services/sucursales'
 import Table from '../../components/Tables/Table.vue'
 const router = useRouter();
-const headers = ['Nombre','Correo','Teléfono','Rol'];
-const columns = ['nombre','correo','telefono','rol_id'];
+const headers = ['Nombre','Cliente','Teléfono','Direccion'];
+const columns = ['nombre','cliente','telefono','direccion'];
 const data = ref([])
 const edit = (id) => {
-    router.push('/usuarios/'+id);
+    console.log('Editando', id);
+    router.push(`/sucursales/${id}`);
 }
 const deleted = async (id) => {
     try {
-        const res = await deleteUsuario(id);
+        const res = await deleteSucursal(id);
         if(res.status < 300){
             console.log('Eliminado', id);
             location.reload();
@@ -22,20 +23,20 @@ const deleted = async (id) => {
     }
 }
 const addUser = () => {
-    router.push('/usuarios/crear');
+    router.push('/sucursales/crear');
 }
 
 onMounted(async () => {
     try {
-        const res = await usuarios();
-        const  d = res.data.data;
-        d.map((item) => {
+        const res = await sucursales();
+        const d = res.data.data;
+        console.log(d)
+        data.value = d.map((item) => {
             item['edit'] = edit
             item['delete'] = deleted
-            item.rol_id = item.rol.nombre;
+            item.cliente = item.cliente.nombre
             return item;
         });
-        data.value = d;
     } catch (error) {
         console.log(error);
     }
@@ -56,7 +57,7 @@ onMounted(async () => {
             :columns="columns"
             :headers="headers"
             :data="data"
-            btn-text="Agregar Usuario"
+            btn-text="Agregar Sucursal"
             :btn-action="addUser"
         />
     </div>
