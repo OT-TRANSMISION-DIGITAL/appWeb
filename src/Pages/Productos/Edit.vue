@@ -38,7 +38,7 @@
                 />
             </div>
             <div class="col-span-2">
-                <InputFile v-model="form.imagen.value" />
+                <InputFile v-model="form.imagen.value" v-model:image-s-r-c="imageSRC" />
                 <img ref="imgRef" alt="" class=""/>
                 <p class="text-red-500 text-sm">{{ form.imagen.error.message }}</p>
             </div>
@@ -76,6 +76,7 @@ const router = useRouter();
 const route = useRoute();
 const imgRef =ref(null)
 const loading = ref(false);
+const imageSRC = ref(null)
 const beforeImagen = ref(null)
 const form = ref({
     nombre: {
@@ -184,6 +185,7 @@ onMounted(async()=>{
             form.value.descripcion.value = res.data.descripcion
             form.value.nombre.value = res.data.nombre
             form.value.precio.value = res.data.precio
+            imageSRC.value = res.data.img ? path_api + res.data.img : null
         }else{
             console.log(res)
         }
