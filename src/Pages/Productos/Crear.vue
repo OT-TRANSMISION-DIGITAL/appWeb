@@ -38,7 +38,7 @@
                 />
             </div>
             <div class="col-span-2">
-                <InputFile v-model="form.imagen.value" />
+                <InputFile v-model="form.imagen.value" v-model:image-s-r-c="IMGSRC"/>
                 <p class="text-red-500 text-sm">{{ form.imagen.error.message }}</p>
             </div>
         </div>
@@ -72,6 +72,7 @@ import Loading from '../../components/Forms/Loading.vue';
 import InputFile from '../../components/Forms/InputImage.vue';
 const router = useRouter();
 const loading = ref(false);
+const IMGSRC = ref('')
 const form = ref({
     nombre: {
         value: '',

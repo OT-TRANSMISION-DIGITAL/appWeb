@@ -86,7 +86,7 @@ onMounted(async () => {
         console.log(d)
         data.value = d.map((item) => {
             item['edit'] = edit
-            item['delete'] = deleted
+            // item['delete'] = deleted
             item.cliente_id = item.cliente.nombre;
             item.tecnico_id = item.tecnico.nombre;
             item.sucursal_id = item.sucursal.nombre;

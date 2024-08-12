@@ -83,7 +83,7 @@
                     <div class="sm:flex sm:items-start mb-4">
                         <h1 class="text-xl">Actualizar Imagen</h1>
                     </div>
-                    <InputFile v-model="imagen" />
+                    <InputFile v-model="imagen" v-model:image-s-r-c="IMGSRC"/>
                     <div>
                         <span>
                             <p class="text-red-500">{{ error }}</p>
@@ -117,6 +117,7 @@ const path_api = import.meta.env.VITE_IMG_URL;
 const {establecerUsuario, state} = useGlobalState()
 const imagen = ref(null)
 const isOpen = ref(false)
+const IMGSRC = ref('')
 const error = ref(null)
 const usuario = ref({
     id: 0,
