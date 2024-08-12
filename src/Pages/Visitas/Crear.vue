@@ -217,7 +217,7 @@ const submit = async (e) => {
             }, 3000);
         }
     } catch (error) {
-        console.log(error);
+        console.error(error);
     }
 }
 
@@ -288,15 +288,15 @@ onMounted(async ()=>{
         const resClientes = await clis();
         if(resClientes.status < 300){
             clientes.value = resClientes.data.data;
-            console.log(clientes.value);
+            //console.log(clientes.value);
         }
         const resTecnicos = await tecs();
         if(resTecnicos.status < 300){
             tecnicos.value = resTecnicos.data;
-            console.log(tecnicos.value);
+            //console.log(tecnicos.value);
         }
     } catch (error) {
-        console.log(error);
+        console.error(error);
     }
 
 })

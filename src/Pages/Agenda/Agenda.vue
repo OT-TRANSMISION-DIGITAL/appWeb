@@ -141,7 +141,7 @@ onMounted(async () => {
         if(resTecnicos.status < 300){
             tecnicos.value = resTecnicos.data
             tecnico_id.value = tecnicos.value[0].id
-            console.log(tecnico_id.value)
+            //console.log(tecnico_id.value)
             await getAgenda(tecnico_id.value)
         }
     } catch (error) {
@@ -188,7 +188,7 @@ const getAgenda = async (id) => {
 
 async function actionCard (event) {
     const {id, tipo} = event
-    console.log(event.id)
+    //console.log(event.id)
     if(tipo == 'ordenes'){
         await modalOrdenes(id)
     }
@@ -203,7 +203,7 @@ async function modalOrdenes(id) {
             ordenData.value = res.data
             isOpenModalOrden.value = true
         }else{
-            console.log(res)
+            //console.log(res)
         }
     } catch (error) {
         console.error(error)
@@ -216,7 +216,7 @@ async function modalVisita(id) {
             visitaData.value = res.data
             isOpenModalVisita.value = true
         }else{
-            console.log(res)
+            //console.log(res)
         }
     } catch (error) {
         console.error(error)

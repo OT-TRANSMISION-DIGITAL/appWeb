@@ -218,7 +218,7 @@ const submit = async (e) => {
             }, 3000);
         }
     } catch (error) {
-        console.log(error);
+        console.error(error);
     }
 }
 
@@ -289,15 +289,15 @@ onMounted(async ()=>{
         const resClientes = await clis();
         if(resClientes.status < 300){
             clientes.value = resClientes.data.data;
-            console.log(clientes.value);
+            //console.log(clientes.value);
         }
         const resTecnicos = await tecs();
         if(resTecnicos.status < 300){
             tecnicos.value = resTecnicos.data;
-            console.log(tecnicos.value);
+            //console.log(tecnicos.value);
         }
         const resVisita = await visita(route.params.id);
-        console.log(resVisita);
+        //console.log(resVisita);
         if(resVisita.status < 300){
             form.value.motivo.value = resVisita.data.motivo;
             form.value.fechaHoraSolicitud.value = resVisita.data.fechaHoraSolicitud;
@@ -310,7 +310,7 @@ onMounted(async ()=>{
             changeCliente(resVisita.data.cliente_id);
         }
     } catch (error) {
-        console.log(error);
+        console.error(error);
     }
 
 })

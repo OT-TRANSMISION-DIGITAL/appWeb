@@ -336,7 +336,7 @@ const back = () => {
 
 const error = ref('');
 const submit = async (e) => {
-    console.log(form.value);
+    //console.log(form.value);
     if (!validar()) return;
     e.preventDefault();
     const options = {
@@ -373,7 +373,7 @@ const submit = async (e) => {
             }, 3000);
         }
     } catch (err) {
-        console.log(err);
+        console.error(err);
         error.value = err.response.data.message || err.response.data.msg || 'Error en el servidor al iniciar sesión';
     }
 }
@@ -529,20 +529,20 @@ onMounted(async () => {
         const resClientes = await clis();
         if (resClientes.status < 300) {
             clientes.value = resClientes.data.data;
-            console.log(clientes.value);
+            //console.log(clientes.value);
         }
         const resTecnicos = await tecs();
         if (resTecnicos.status < 300) {
             tecnicos.value = resTecnicos.data;
-            console.log(tecnicos.value);
+            //console.log(tecnicos.value);
         }
         const resProductos = await prods();
         if (resProductos.status < 300) {
             productos.value = resProductos.data.data;
-            console.log(productos.value);
+            //console.log(productos.value);
         }
     } catch (error) {
-        console.log(error);
+        console.error(error);
     }
 
 })

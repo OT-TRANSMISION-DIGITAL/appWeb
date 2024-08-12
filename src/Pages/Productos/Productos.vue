@@ -8,18 +8,18 @@ const headers = ['Imagen','Nombre','Descripcion','Precio'];
 const columns = ['img','nombre','descripcion','precio'];
 const data = ref([])
 const edit = (id) => {
-    console.log('Editando', id);
+    //console.log('Editando', id);
     router.push(`/productos/${id}`);
 }
 const deleted = async (id) => {
     try {
         const res = await deleteProducto(id);
         if(res.status < 300){
-            console.log('Eliminado', id);
+            //console.log('Eliminado', id);
             location.reload();
         }
     } catch (error) {
-        console.log(error);
+        console.error(error);
     }
 }
 const addUser = () => {
@@ -40,9 +40,9 @@ onMounted(async () => {
             `<p></p>`
             return item;
         });
-        console.log(d)
+        //console.log(d)
     } catch (error) {
-        console.log(error);
+        console.error(error);
     }
 });
 

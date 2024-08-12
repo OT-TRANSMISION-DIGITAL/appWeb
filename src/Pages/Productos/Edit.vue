@@ -76,7 +76,7 @@ const router = useRouter();
 const route = useRoute();
 const imgRef =ref(null)
 const loading = ref(false);
-const imageSRC = ref(null)
+const imageSRC = ref('')
 const beforeImagen = ref(null)
 const form = ref({
     nombre: {
@@ -185,9 +185,9 @@ onMounted(async()=>{
             form.value.descripcion.value = res.data.descripcion
             form.value.nombre.value = res.data.nombre
             form.value.precio.value = res.data.precio
-            imageSRC.value = res.data.img ? path_api + res.data.img : null
+            imageSRC.value = res.data.img ? path_api + res.data.img : ''
         }else{
-            console.log(res)
+            //console.log(res)
         }
     } catch (error) {
         console.error(error)
@@ -225,7 +225,7 @@ const sendImagen = async (id) => {
             error.value = resUpdateImagen?.data?.message || 'Error al guardar la imagen';
         }
     } catch (err) {
-        console.log(err);
+        console.error(err);
         error.value = err?.response?.data?.message || err?.data?.message || err?.message || 'Error al guardar la imagen';
     }
 }

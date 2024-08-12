@@ -11,54 +11,54 @@ const data = ref([]);
 const ordenData = ref(null)
 const isOpenModal = ref(false)
 const edit = (id) => {
-    console.log('Editando', id);
+    //console.log('Editando', id);
     router.push(`/ordenes/${id}`);
 }
 const cancelar = async (id) => {
     try {
         const res = await cancel(id);
         if(res.status < 300){
-            console.log('Cancelado', id);
+            //console.log('Cancelado', id);
             location.reload();
         }
     } catch (error) {
-        console.log(error);
+        console.error(error);
     }
 }
 const auto = async (id) => {
     try {
         const res = await autorizar(id);
         if(res.status < 300){
-            console.log('Autorizado', id);
+            //console.log('Autorizado', id);
             location.reload();
         }
     } catch (error) {
-        console.log(error);
+        console.error(error);
     }
 }
 const deleted = async (id) => {
     try {
         const res = await del(id);
         if(res.status < 300){
-            console.log('Eliminado', id);
+            //console.log('Eliminado', id);
             location.reload();
         }
     } catch (error) {
-        console.log(error);
+        console.error(error);
     }
 }
 const document = async (id) => {
     try {
         const res = await pdf(id);
         if(res.status < 300){
-            console.log(res);
+            //console.log(res);
             const file = new Blob([res.data], { type: 'application/pdf' });
             const fileURL = URL.createObjectURL(file);
             window.open(fileURL, '_blank');
 
         }
     } catch (error) {
-        console.log(error);
+        console.error(error);
     }
 }
 const show = async (id) => {
@@ -68,7 +68,7 @@ const show = async (id) => {
             ordenData.value = res.data
             isOpenModal.value = true
         }else{
-            console.log(res)
+            //console.log(res)
         }
     } catch (error) {
         console.error(error)
@@ -82,7 +82,7 @@ onMounted(async () => {
     try {
         const res = await ordenes();
         const d = res.data.data;
-        console.log(d)
+        //console.log(d)
         data.value = d.map((item) => {
             item['edit'] = edit
             // item['delete'] = deleted
@@ -102,7 +102,7 @@ onMounted(async () => {
             return item;
         });
     } catch (error) {
-        console.log(error);
+        console.error(error);
     }
 });
 

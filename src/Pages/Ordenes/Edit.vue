@@ -338,7 +338,7 @@ const back = () => {
 
 const error = ref('');
 const submit = async (e) => {
-    console.log(form.value);
+    //console.log(form.value);
     if (!validar()) return;
     e.preventDefault();
     const options = {
@@ -375,7 +375,7 @@ const submit = async (e) => {
             }, 3000);
         }
     } catch (err) {
-        console.log(err);
+        console.error(err);
         error.value = err.response.data.message || err.response.data.msg || 'Error en el servidor';
     }
 }
@@ -575,7 +575,7 @@ onMounted(async () => {
             }));
         }
     } catch (error) {
-        console.log(error);
+        console.error(error);
     }
 
 })

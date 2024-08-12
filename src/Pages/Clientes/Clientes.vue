@@ -8,18 +8,18 @@ const headers = ['Nombre','Correo','Teléfono'];
 const columns = ['nombre','correo','telefono'];
 const data = ref([])
 const edit = (id) => {
-    console.log('Editando', id);
+    //console.log('Editando', id);
     router.push(`/clientes/${id}`);
 }
 const deleted = async (id) => {
     try {
         const res = await deleteCliente(id);
         if(res.status < 300){
-            console.log('Eliminado', id);
+            //console.log('Eliminado', id);
             location.reload();
         }
     } catch (error) {
-        console.log(error);
+        console.error(error);
     }
 }
 const addUser = () => {
@@ -36,7 +36,7 @@ onMounted(async () => {
             return item;
         });
     } catch (error) {
-        console.log(error);
+        console.error(error);
     }
 });
 

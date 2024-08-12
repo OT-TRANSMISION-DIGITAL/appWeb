@@ -204,7 +204,7 @@ const sendImagen = async (id) => {
             error.value = resUpdateImagen?.data?.message || 'Error al guardar la imagen';
         }
     } catch (err) {
-        console.log(err);
+        console.error(err);
         error.value = err?.response?.data?.message || err?.data?.message || err?.message || 'Error al guardar la imagen';
     }
 }

@@ -14,11 +14,11 @@ const deleted = async (id) => {
     try {
         const res = await deleteUsuario(id);
         if(res.status < 300){
-            console.log('Eliminado', id);
+            //console.log('Eliminado', id);
             location.reload();
         }
     } catch (error) {
-        console.log(error);
+        console.error(error);
     }
 }
 const addUser = () => {
@@ -37,7 +37,7 @@ onMounted(async () => {
         });
         data.value = d;
     } catch (error) {
-        console.log(error);
+        console.error(error);
     }
 });
 

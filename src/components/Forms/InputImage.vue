@@ -52,7 +52,7 @@ const file = ref(null);
 
 watch(() => props.modelValue, (newFile) => {
   if (newFile) {
-    console.log(newFile);
+    //console.log(newFile);
     filenameLabel.value.textContent = newFile.name;
 
     const reader = new FileReader();
