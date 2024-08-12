@@ -391,7 +391,7 @@ const validar = () => {
     }
 
     // Validar nombre solo debe tener letras
-    if(!/^[a-zA-Z\s]*$/.test(form.value.nombre.value)){
+    if(!/^[a-zA-Z\s]*$/.test(form.value.persona_solicitante.value)){
         form.value.persona_solicitante.error.status = 'error';
         form.value.persona_solicitante.error.message = 'Solo debe contener letras';
         valid = false;
@@ -414,7 +414,7 @@ const validar = () => {
     }
 
     // Validar nombre solo debe tener letras y mayor a 10
-    if(!/^[a-zA-Z\s]*$/.test(form.value.nombre.value)){
+    if(!/^[a-zA-Z\s]*$/.test(form.value.direccion.value)){
         form.value.direccion.error.status = 'error';
         form.value.direccion.error.message = 'Solo debe contener letras';
         valid = false;
