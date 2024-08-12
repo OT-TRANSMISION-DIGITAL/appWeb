@@ -158,9 +158,27 @@ const validar = () => {
         form.value.nombre.error.message = 'El nombre es requerido';
         valid = false;
     }
+    // Validar nombre solo debe tener letras y mayor a 10
+    if(!/^[a-zA-Z\s]*$/.test(form.value.nombre.value)){
+        form.value.nombre.error.status = 'error';
+        form.value.nombre.error.message = 'Solo debe contener letras';
+        valid = false;
+    }
     if(form.value.descripcion.value === ''){
         form.value.descripcion.error.status = 'error';
         form.value.descripcion.error.message = 'La descripcion es requerido';
+        valid = false;
+    }
+    // Validar nombre solo debe tener letras y mayor a 10
+    if(!/^[a-zA-Z\s]*$/.test(form.value.nombre.value)){
+        form.value.descripcion.error.status = 'error';
+        form.value.descripcion.error.message = 'Solo debe contener letras';
+        valid = false;
+    }
+    // validar descripcion mayor a 10
+    if(form.value.descripcion.value.length < 10){
+        form.value.descripcion.error.status = 'error';
+        form.value.descripcion.error.message = 'Debe tener al menos 10 caracteres';
         valid = false;
     }
     if(form.value.precio.value === ''){

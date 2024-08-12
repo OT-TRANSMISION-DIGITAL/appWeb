@@ -389,6 +389,13 @@ const validar = () => {
         form.value.persona_solicitante.error.status = 'success';
         form.value.persona_solicitante.error.message = '';
     }
+
+    // Validar nombre solo debe tener letras
+    if(!/^[a-zA-Z\s]*$/.test(form.value.nombre.value)){
+        form.value.persona_solicitante.error.status = 'error';
+        form.value.persona_solicitante.error.message = 'Solo debe contener letras';
+        valid = false;
+    }
     if (!form.value.fechaHoraSolicitud.value) {
         form.value.fechaHoraSolicitud.error.status = 'error';
         form.value.fechaHoraSolicitud.error.message = 'El campo es requerido';
@@ -404,6 +411,19 @@ const validar = () => {
     } else {
         form.value.direccion.error.status = 'success';
         form.value.direccion.error.message = '';
+    }
+
+    // Validar nombre solo debe tener letras y mayor a 10
+    if(!/^[a-zA-Z\s]*$/.test(form.value.nombre.value)){
+        form.value.direccion.error.status = 'error';
+        form.value.direccion.error.message = 'Solo debe contener letras';
+        valid = false;
+    }
+    // validar direccion mayor a 10
+    if(form.value.direccion.value.length < 10){
+        form.value.direccion.error.status = 'error';
+        form.value.direccion.error.message = 'Debe tener al menos 10 caracteres';
+        valid = false;
     }
     if (!form.value.cliente_id.value) {
         form.value.cliente_id.error.status = 'error';

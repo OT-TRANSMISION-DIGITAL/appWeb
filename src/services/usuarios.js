@@ -1,8 +1,8 @@
 import axios from './axios.js';
 
-export const usuarios = async () => {
+export const usuarios = async (page) => {
     try {
-        const response = await axios.get('usuarios');
+        const response = await axios.get('usuarios?page=' + (page || 1));
         return response;
     } catch (error) {
         return Promise.reject(error);

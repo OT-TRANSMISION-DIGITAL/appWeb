@@ -233,6 +233,12 @@ const validar = ()=>{
         form.value.motivo.error.status = 'success';
         form.value.motivo.error.message = '';
     }
+    // Motivo solo debe tener letras
+    if(form.value.motivo.value != '' && !/^[a-zA-Z\s]*$/.test(form.value.motivo.value)){
+        form.value.motivo.error.status = 'error';
+        form.value.motivo.error.message = 'El campo solo debe tener letras';
+        valid = false;
+    }
     if(form.value.fechaHoraSolicitud.value == ''){
         form.value.fechaHoraSolicitud.error.status = 'error';
         form.value.fechaHoraSolicitud.error.message = 'El campo es requerido';
@@ -248,6 +254,12 @@ const validar = ()=>{
     }else{
         form.value.direccion.error.status = 'success';
         form.value.direccion.error.message = '';
+    }
+    // Dirección mayor a 10
+    if(form.value.direccion.value != '' && form.value.direccion.value.length < 10){
+        form.value.direccion.error.status = 'error';
+        form.value.direccion.error.message = 'El campo debe tener al menos 10 caracteres';
+        valid = false;
     }
     if(form.value.cliente_id.value == ''){
         form.value.cliente_id.error.status = 'error';

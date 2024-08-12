@@ -41,10 +41,32 @@ onMounted(async () => {
             return item;
         });
         //console.log(d)
+        paginateData();
     } catch (error) {
         console.error(error);
     }
 });
+
+async function paginateData(){
+    // Siclo para paginar la api mientrar traega resultados
+    let page = 2;
+    let res = await productos(page);
+    let d = res.data.data;
+    while(d.length > 0){
+        data.value = data.value.concat(d.map((item) => {
+            item['edit'] = edit
+            item['delete'] = deleted
+            item.precio = `$ ${parseFloat(item?.precio || 0).toFixed(2)}`
+            item.img = item.img ? `<img src="${path_api+(item.img.replaceAll(/\\/g, ''))}" alt="Imagen Usuario" width="40" class="">`
+            :
+            `<p></p>`
+            return item;
+        }));
+        page++;
+        res = await productos(page);
+        d = res.data.data;
+    }
+}
 
 </script>
 

@@ -99,10 +99,37 @@ onMounted(async () => {
             }
             return item;
         });
+        paginateData();
     } catch (error) {
         console.error(error);
     }
 });
+async function paginateData(params) {
+    // Siclo para paginar la api mientrar traega resultados
+    let page = 2;
+    let res = await visitas(page);
+    let d = res.data.data;
+    while(d.length > 0){
+        data.value = data.value.concat(d.map((item) => {
+            item['edit'] = edit
+            // item['delete'] = deleted
+            item.cliente_id = item.cliente.nombre;
+            item.tecnico_id = item.tecnico.nombre;
+            item.sucursal_id = item.sucursal.nombre;
+            item['show'] = show
+            if(item.estatus == 'Sin Autorizar'){
+                item['cancel'] = cancelar
+                item['success'] = auto
+            }else if(item.estatus == 'Autorizada'){
+                item['cancel'] = cancelar
+            }
+            return item;
+        }));
+        page++;
+        res = await visitas(page);
+        d = res.data.data;
+    }
+}
 function convertirFecha(fechaOriginal){
     // Crear un objeto Date a partir de la cadena original
     const fecha = new Date(fechaOriginal);
