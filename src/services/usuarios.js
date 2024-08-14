@@ -66,3 +66,7 @@ export const user = async () => {
 export const updateImagen = (id, imagen) => {
     return axios.post(`usuarios/guardarImagen/${id}`, imagen);
 }
+
+export const fechasTecnico = (tecnico, fecha) => {
+    return axios.get(`horarios?fecha=${fecha}&tecnico=${tecnico}`);
+}
