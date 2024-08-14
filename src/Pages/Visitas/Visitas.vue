@@ -5,7 +5,7 @@ import { visitas, del, autorizar, cancel, visita }  from '../../services/visitas
 import Table from '../../components/Tables/Table.vue';
 import Modal from '../../components/Modal.vue';
 const router = useRouter();
-const headers = ['Motivo','Dirección','Cliente', 'Técnico', 'Sucursal', 'Fecha', 'Estado'];
+const headers = ['Motivo','Dirección','Cliente', 'Técnico', 'Sucursal', 'Fecha de Solicitud', 'Estado'];
 const columns = ['motivo','direccion','cliente_id', 'tecnico_id', 'sucursal_id', 'fechaHoraSolicitud','estatus'];
 const data = ref([]);
 const visitaData = ref(null)
@@ -116,11 +116,12 @@ async function paginateData(params) {
             item.cliente_id = item.cliente.nombre;
             item.tecnico_id = item.tecnico.nombre;
             item.sucursal_id = item.sucursal.nombre;
-            item['show'] = show
             if(item.estatus == 'Sin Autorizar'){
+                item['show'] = show
                 item['cancel'] = cancelar
                 item['success'] = auto
             }else if(item.estatus == 'Autorizada'){
+                item['show'] = show
                 item['cancel'] = cancelar
             }
             return item;

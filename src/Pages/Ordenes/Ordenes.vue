@@ -5,7 +5,7 @@ import { ordenes, del, cancel, autorizar, pdf, orden }  from '../../services/ord
 import Table from '../../components/Tables/Table.vue'
 import Modal from '../../components/Modal.vue'
 const router = useRouter();
-const headers = ['Solicitante','Dirección','Cliente', 'Técnico', 'Sucursal', 'Fecha', 'Estado'];
+const headers = ['Solicitante','Dirección','Cliente', 'Técnico', 'Sucursal', 'Fecha de Solicitud', 'Estado'];
 const columns = ['persona_solicitante','direccion','cliente_id', 'tecnico_id', 'sucursal_id', 'fechaHoraSolicitud','estatus'];
 const data = ref([]);
 const ordenData = ref(null)
@@ -84,7 +84,6 @@ onMounted(async () => {
         const d = res.data.data;
         //console.log(d)
         data.value = d.map((item) => {
-            item['edit'] = edit
             // item['delete'] = deleted
             item.cliente_id = item.cliente.nombre;
             item.tecnico_id = item.tecnico.nombre;
@@ -92,9 +91,11 @@ onMounted(async () => {
             item['show'] = show
             if(item.estatus == 'Sin Autorizar'){
                 item['success'] = auto
+                item['edit'] = edit
                 item['cancel'] = cancelar
             }else if(item.estatus == 'Autorizada'){
                 item['cancel'] = cancelar
+                item['edit'] = edit
             }else if(item.estatus == 'Finalizada'){
                 item['document'] = document
             }

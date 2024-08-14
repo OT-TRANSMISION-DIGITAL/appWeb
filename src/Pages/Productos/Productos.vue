@@ -83,7 +83,7 @@ async function paginateData(){
             :columns="columns"
             :headers="headers"
             :data="data"
-            btn-text="Agregar Producto"
+            btn-text="Agregar Producto / Servicio"
             :btn-action="addUser"
         />
     </div>

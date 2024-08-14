@@ -16,6 +16,7 @@
         @blur="handleBlur"
         @change="change && change($event)"
         :disabled="disabled"
+        :min="minDate ? minDate : undefined"
         ref="inputRef"
       />
       <p :class="messageClass">
@@ -38,6 +39,7 @@
     id?: string;
     type?: string;
     change?: (value: any) => void;
+    minDate?: string;
   }>();
   
   const emit = defineEmits(['update:modelValue']);
