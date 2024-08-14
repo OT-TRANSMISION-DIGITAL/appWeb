@@ -36,6 +36,7 @@
                         placeholder="Fecha de solicitud" type="date" name="fechaHoraSolicitud" id="fechaHoraSolicitud"
                         :validation-status="form.fechaSolicitud.error.status"
                         :change="changueTime"
+                        :min-date="new Date().toISOString().split('T')[0]"
                         :validation-message="form.fechaSolicitud.error.message" 
                         />
                 </div>
@@ -313,14 +314,6 @@ const validar = ()=>{
     }else{
         form.value.tecnico_id.error.status = 'success';
         form.value.tecnico_id.error.message = '';
-    }
-    if(form.value.sucursal_id.value == ''){
-        form.value.sucursal_id.error.status = 'error';
-        form.value.sucursal_id.error.message = 'El campo es requerido';
-        valid = false;
-    }else{
-        form.value.sucursal_id.error.status = 'success';
-        form.value.sucursal_id.error.message = '';
     }
     return valid;
 }

@@ -3,7 +3,7 @@
       <form class="w-[35rem] max-w-4xl p-8 bg-white border-4 border-[#3E4095] rounded-md shadow-md"
         @submit="sub($event)"
       >
-        <h2 class="mb-5 text-4xl font-bold text-center text-[#3E4095]">Registrar Producto</h2>
+        <h2 class="mb-5 text-4xl font-bold text-center text-[#3E4095]">Registrar Producto / Servicio</h2>
         <div class="grid grid-cols-2 gap-10 mt-5">
             <div class="col-span-2">
                 <Input 
@@ -158,21 +158,9 @@ const validar = () => {
         form.value.nombre.error.message = 'El nombre es requerido';
         valid = false;
     }
-    // Validar nombre solo debe tener letras y mayor a 10
-    if(!/^[a-zA-Z\s]*$/.test(form.value.nombre.value)){
-        form.value.nombre.error.status = 'error';
-        form.value.nombre.error.message = 'Solo debe contener letras';
-        valid = false;
-    }
     if(form.value.descripcion.value === ''){
         form.value.descripcion.error.status = 'error';
         form.value.descripcion.error.message = 'La descripcion es requerido';
-        valid = false;
-    }
-    // Validar nombre solo debe tener letras y mayor a 10
-    if(!/^[a-zA-Z\s]*$/.test(form.value.nombre.value)){
-        form.value.descripcion.error.status = 'error';
-        form.value.descripcion.error.message = 'Solo debe contener letras';
         valid = false;
     }
     // validar descripcion mayor a 10
