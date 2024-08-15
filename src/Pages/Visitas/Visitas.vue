@@ -89,7 +89,7 @@ onMounted(async () => {
             // item['delete'] = deleted
             item.cliente_id = item.cliente.nombre;
             item.tecnico_id = item.tecnico.nombre;
-            item.sucursal_id = item.sucursal.nombre;
+            item.sucursal_id = item.sucursal?.nombre || '';
             item['show'] = show
             if(item.estatus == 'Sin Autorizar'){
                 item['cancel'] = cancelar
@@ -111,18 +111,19 @@ async function paginateData(params) {
     let d = res.data.data;
     while(d.length > 0){
         data.value = data.value.concat(d.map((item) => {
-            item['edit'] = edit
             // item['delete'] = deleted
             item.cliente_id = item.cliente.nombre;
             item.tecnico_id = item.tecnico.nombre;
-            item.sucursal_id = item.sucursal.nombre;
+            item.sucursal_id = item.sucursal?.nombre || '';
             if(item.estatus == 'Sin Autorizar'){
                 item['show'] = show
                 item['cancel'] = cancelar
                 item['success'] = auto
+                item['edit'] = edit
             }else if(item.estatus == 'Autorizada'){
                 item['show'] = show
                 item['cancel'] = cancelar
+                item['edit'] = edit
             }
             return item;
         }));
@@ -181,7 +182,7 @@ function convertirFecha(fechaOriginal){
             <div class="mt-4 grid grid-cols-2 gap-4">
               <div>
                 <div class="text-sm font-medium text-gray-500">Nombre</div>
-                <div class="text-lg font-bold">{{visitaData.sucursal.nombre }}</div>
+                <div class="text-lg font-bold">{{visitaData.sucursal?.nombre || '' }}</div>
               </div>
               <div>
                 <div class="text-sm font-medium text-gray-500">Telefono</div>
@@ -197,12 +198,20 @@ function convertirFecha(fechaOriginal){
             <h2 class="text-2xl font-bold">Detalles de la Visita</h2>
             <div class="mt-4 grid grid-cols-2 gap-4">
               <div>
-                <div class="text-sm font-medium text-gray-500">Fecha</div>
+                <div class="text-sm font-medium text-gray-500">Fecha de solicitud</div>
                 <div class="text-lg font-bold">{{ convertirFecha(visitaData.fechaHoraSolicitud).split("\n")[0] }}</div>
               </div>
               <div>
-                <div class="text-sm font-medium text-gray-500">Hora</div>
+                <div class="text-sm font-medium text-gray-500">Hora de solicitud</div>
                 <div class="text-lg font-bold">{{ convertirFecha(visitaData.fechaHoraSolicitud).split("\n")[1] }}</div>
+              </div>
+              <div>
+                <div class="text-sm font-medium text-gray-500">Hora Llegada</div>
+                <div class="text-lg font-bold">{{ visitaData.fechaHoraLlegada ? convertirFecha(visitaData.fechaHoraLlegada).split("\n")[1] : '--:--' }}</div>
+              </div>
+              <div>
+                <div class="text-sm font-medium text-gray-500">Hora Salida</div>
+                <div class="text-lg font-bold">{{ visitaData.fechaHoraSalida ? convertirFecha(visitaData.fechaHoraSalida).split("\n")[1] : '--:--'}}</div>
               </div>
               <div>
                 <div class="text-sm font-medium text-gray-500">Cliente</div>

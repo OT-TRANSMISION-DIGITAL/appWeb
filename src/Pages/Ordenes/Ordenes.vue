@@ -87,7 +87,7 @@ onMounted(async () => {
             // item['delete'] = deleted
             item.cliente_id = item.cliente.nombre;
             item.tecnico_id = item.tecnico.nombre;
-            item.sucursal_id = item.sucursal.nombre;
+            item.sucursal_id = item.sucursal?.nombre || '';
             item['show'] = show
             if(item.estatus == 'Sin Autorizar'){
                 item['success'] = auto
@@ -114,17 +114,18 @@ async function  paginateData() {
     let d = res.data.data;
     while(d.length > 0){
         data.value = data.value.concat(d.map((item) => {
-            item['edit'] = edit
             // item['delete'] = deleted
             item.cliente_id = item.cliente.nombre;
             item.tecnico_id = item.tecnico.nombre;
-            item.sucursal_id = item.sucursal.nombre;
+            item.sucursal_id = item.sucursal?.nombre || '';
             item['show'] = show
             if(item.estatus == 'Sin Autorizar'){
                 item['success'] = auto
                 item['cancel'] = cancelar
+                item['edit'] = edit
             }else if(item.estatus == 'Autorizada'){
                 item['cancel'] = cancelar
+                item['edit'] = edit
             }else if(item.estatus == 'Finalizada'){
                 item['document'] = document
             }
@@ -209,19 +210,27 @@ function convertirFecha(fechaOriginal){
             <h2 class="text-2xl font-bold">Detalles de la Orden</h2>
             <div class="mt-4 grid grid-cols-2 gap-4">
               <div>
-                <div class="text-sm font-medium text-gray-500">Fecha</div>
+                <div class="text-sm font-medium text-gray-500">Fecha de Solicitud</div>
                 <div class="text-lg font-bold">{{ convertirFecha(ordenData.fechaHoraSolicitud).split("\n")[0] }}</div>
               </div>
               <div>
-                <div class="text-sm font-medium text-gray-500">Hora</div>
+                <div class="text-sm font-medium text-gray-500">Hora Solicitud</div>
                 <div class="text-lg font-bold">{{ convertirFecha(ordenData.fechaHoraSolicitud).split("\n")[1] }}</div>
+              </div>
+              <div>
+                <div class="text-sm font-medium text-gray-500">Hora Llegada</div>
+                <div class="text-lg font-bold">{{ ordenData.fechaHoraLlegada ? convertirFecha(ordenData.fechaHoraLlegada).split("\n")[1] : '--:--' }}</div>
+              </div>
+              <div>
+                <div class="text-sm font-medium text-gray-500">Hora Salida</div>
+                <div class="text-lg font-bold">{{ ordenData.fechaHoraSalida ? convertirFecha(ordenData.fechaHoraSalida).split("\n")[1] : '--:--'}}</div>
               </div>
               <div>
                 <div class="text-sm font-medium text-gray-500">Cliente</div>
                 <div class="text-lg font-bold">{{ ordenData.cliente.nombre }}</div>
               </div>
               <div>
-                <div class="text-sm font-medium text-gray-500">Tecnico</div>
+                <div class="text-sm font-medium text-gray-500">Técnico</div>
                 <div class="text-lg font-bold">{{ ordenData.tecnico.nombre }} </div>
               </div>
             </div>

@@ -1,4 +1,6 @@
 import axios from './axios.js';
+import {useGlobalState} from '../store/Loading.js'
+const { establecerLoading } = useGlobalState()
 
 export const usuarios = async (page) => {
     try {
@@ -37,20 +39,26 @@ export const deleteUsuario = async (id) => {
 }
 
 export const crearUsuario = async (usuario) => {
+    establecerLoading(true)
     try {
         const response = await axios.post('registrar', usuario);
         return response;
     } catch (error) {
         return Promise.reject(error);
+    }finally{
+        establecerLoading(false)
     }
 }
 
 export const editarUsuario = async (id, usuario) => {
+    establecerLoading(true)
     try {
         const response = await axios.put(`usuarios/${id}`, usuario);
         return response;
     } catch (error) {
         return Promise.reject(error);
+    }finally{
+        establecerLoading(false)
     }
 }
 

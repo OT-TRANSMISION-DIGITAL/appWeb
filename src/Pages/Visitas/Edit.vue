@@ -111,7 +111,7 @@
                     v-model="form.direccion.value"
                     label="Dirección"
                     placeholder="Dirección"
-                    type="email"
+                    type="text"
                     name="direccion"
                     id="direccion"
                     :validation-status="form.direccion.error.status"
