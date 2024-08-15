@@ -51,6 +51,14 @@
                 <div class="text-lg font-bold">{{ convertirFecha(ordenData.fechaHoraSolicitud).split("\n")[1] }}</div>
               </div>
               <div>
+                <div class="text-sm font-medium text-gray-500">Hora Llegada</div>
+                <div class="text-lg font-bold">{{ ordenData.fechaHoraLlegada ? convertirFecha(ordenData.fechaHoraLlegada).split("\n")[1] : '--:--' }}</div>
+              </div>
+              <div>
+                <div class="text-sm font-medium text-gray-500">Hora Salida</div>
+                <div class="text-lg font-bold">{{ ordenData.fechaHoraSalida ? convertirFecha(ordenData.fechaHoraSalida).split("\n")[1] : '--:--'}}</div>
+              </div>
+              <div>
                 <div class="text-sm font-medium text-gray-500">Cliente</div>
                 <div class="text-lg font-bold">{{ ordenData.cliente.nombre }}</div>
               </div>
@@ -99,6 +107,15 @@
               <div>
                 <div class="text-sm font-medium text-gray-500">Hora</div>
                 <div class="text-lg font-bold">{{ convertirFecha(visitaData.fechaHoraSolicitud).split("\n")[1] }}</div>
+              </div>
+              
+              <div>
+                <div class="text-sm font-medium text-gray-500">Hora Llegada</div>
+                <div class="text-lg font-bold">{{ visitaData.fechaHoraLlegada ? convertirFecha(visitaData.fechaHoraLlegada).split("\n")[1] : '--:--' }}</div>
+              </div>
+              <div>
+                <div class="text-sm font-medium text-gray-500">Hora Salida</div>
+                <div class="text-lg font-bold">{{ visitaData.fechaHoraSalida ? convertirFecha(visitaData.fechaHoraSalida).split("\n")[1] : '--:--'}}</div>
               </div>
               <div>
                 <div class="text-sm font-medium text-gray-500">Cliente</div>

@@ -187,7 +187,7 @@ const routes = [
                 } ,
                 props:{
                     title:{
-                        title: "Productos"
+                        title: "Producto / Servicio"
                     }
                 }
             },
@@ -200,7 +200,7 @@ const routes = [
                 } ,
                 props:{
                     title:{
-                        title: "Editar Producto"
+                        title: "Editar Producto / Servicio"
                     }
                 }
             },
@@ -213,7 +213,7 @@ const routes = [
                 } ,
                 props:{
                     title:{
-                        title: "Crear Producto"
+                        title: "Crear Producto / Servicio"
                     }
                 }
             },

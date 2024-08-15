@@ -433,13 +433,6 @@ const validar = () => {
         form.value.persona_solicitante.error.status = 'success';
         form.value.persona_solicitante.error.message = '';
     }
-
-    // Validar nombre solo debe tener letras
-    if(!/^[a-zA-Z\s]*$/.test(form.value.persona_solicitante.value)){
-        form.value.persona_solicitante.error.status = 'error';
-        form.value.persona_solicitante.error.message = 'Solo debe contener letras';
-        valid = false;
-    }
     if (!form.value.horaSolicitud.value) {
         form.value.horaSolicitud.error.status = 'error';
         form.value.horaSolicitud.error.message = 'El campo es requerido';
