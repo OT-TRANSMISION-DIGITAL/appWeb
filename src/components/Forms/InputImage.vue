@@ -14,7 +14,7 @@
       </svg>
       <h5 class="mb-2 text-xl font-bold tracking-tight text-gray-700">Upload picture</h5>
       <p class="font-normal text-sm text-gray-400 md:px-6">Choose photo size should be less than <b class="text-gray-600">2mb</b></p>
-      <p class="font-normal text-sm text-gray-400 md:px-6">and should be in <b class="text-gray-600">JPG, PNG, or GIF</b> format.</p>
+      <p class="font-normal text-sm text-gray-400 md:px-6">and should be in <b class="text-gray-600">JPG, PNG</b> format.</p>
     </label>
     <span ref="filenameLabel" class="text-gray-500 bg-gray-200 z-50"></span>
     <img :src="imageSRC" alt="Img" v-if="imageSRC" class="max-h-32 rounded-lg mx-auto">

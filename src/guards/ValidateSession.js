@@ -8,7 +8,7 @@ async function verifyToken(to, from, next) {
         const userResponse = await user();
         if (userResponse.status < 300) {
             establecerUsuario(userResponse.data)
-            to.path === '/login' ? next({name: 'Dashboard'}) : next();
+            to.path === '/login' ? next({name: 'Agenda'}) : next();
             return;
         }else{
             //console.log(userResponse);
