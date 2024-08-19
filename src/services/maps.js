@@ -5,9 +5,10 @@ const base_url = import.meta.env.VITE_API_GOOGLE_MAPS; // Reemplaza con tu clave
 
 export const getAddress = async (lat, lng) => {
     const url = `${base_url}?latlng=${lat},${lng}&key=${apiKey}`;
+    // hacer la peticion con un timout de 2 segundos
     try {
         const response = await axios.get(url);
-        return response
+        return response;
     } catch (error) {
         console.error('Error fetching address: ', error);
     }

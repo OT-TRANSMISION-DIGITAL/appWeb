@@ -69,9 +69,9 @@ const show = async (id) => {
         const res = await orden(id)
         if (res.status < 300) {
             ordenData.value = res.data
-
-            if (ordenData.value.coorLlegad) {
-                const splitLl = ordenData.value.coorLlegad.split(" ");
+            
+            if (ordenData.value.coorLlegada) {
+                const splitLl = ordenData.value.coorLlegada.split(" ");
                 ordenData.value.latLl = dmsToDecimal(splitLl[0]);
                 ordenData.value.lngLl = dmsToDecimal(splitLl[1]);
             }
