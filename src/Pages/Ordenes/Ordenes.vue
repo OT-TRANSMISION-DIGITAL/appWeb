@@ -311,6 +311,10 @@ function ShowInMaps(data) {
                     </div>
                     <div class="text-lg font-bold">{{ ordenData?.direccion || '' }} </div>
                 </div>
+                <div v-if="ordenData.sucursal">
+                    <div class="text-sm font-medium text-gray-500">Sucursal</div>
+                    <div class="text-lg font-bold">{{ ordenData.sucursal.nombre }} </div>
+                </div>
             </div>
         </template>
         <template v-slot:footer>
